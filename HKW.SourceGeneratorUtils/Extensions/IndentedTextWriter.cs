@@ -11,6 +11,26 @@ namespace HKW.SourceGeneratorUtils;
 public static class IndentedTextWriterExtensions
 {
     /// <summary>
+    /// 写入信息
+    /// </summary>
+    /// <param name="writer">写入器</param>
+    /// <param name="info">成员信息</param>
+    public static void WriteInfo(this IndentedTextWriter writer, IMemberGenerateInfo info)
+    {
+        info.WriteTo(writer);
+    }
+
+    /// <summary>
+    /// 写入信息
+    /// </summary>
+    /// <param name="writer">写入器</param>
+    /// <param name="info">对象信息</param>
+    public static void WriteInfo(this IndentedTextWriter writer, ObjectGenerateInfo info)
+    {
+        info.WriteTo(writer);
+    }
+
+    /// <summary>
     /// 写入至
     /// </summary>
     /// <typeparam name="T">项目类型</typeparam>

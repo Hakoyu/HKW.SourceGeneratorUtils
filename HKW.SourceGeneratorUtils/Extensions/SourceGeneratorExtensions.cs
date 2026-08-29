@@ -132,15 +132,15 @@ public static class SourceGeneratorExtensions
     /// </summary>
     /// <param name="methodType"></param>
     /// <returns></returns>
-    public static string ToStr(this MethodType methodType)
+    public static string ToStr(this MethodGenerateType methodType)
     {
         return methodType switch
         {
-            MethodType.Static => "static",
-            MethodType.Partial => "partial",
-            MethodType.Override => "override",
-            MethodType.Abstract => "abstract",
-            MethodType.Virtual => "virtual",
+            MethodGenerateType.Static => "static",
+            MethodGenerateType.Partial => "partial",
+            MethodGenerateType.Override => "override",
+            MethodGenerateType.Abstract => "abstract",
+            MethodGenerateType.Virtual => "virtual",
             _ => "",
         };
     }
