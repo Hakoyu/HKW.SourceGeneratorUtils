@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="HKW.SourceGenerator/HKW.SourceGenerator.csproj" />
+  <Project Path="HKW.SourceGeneratorDemo/HKW.SourceGeneratorDemo.csproj" />
+  <Project Path="HKW.SourceGeneratorUtils/HKW.SourceGeneratorUtils.csproj" />
+</Solution>
