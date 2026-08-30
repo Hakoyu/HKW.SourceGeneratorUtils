@@ -8,10 +8,10 @@ namespace HKW.SourceGeneratorUtils;
 public class AttributeGenerateInfo
 {
     /// <inheritdoc/>
-    /// <param name="typeName">类型名称</param>
-    public AttributeGenerateInfo(string typeName)
+    /// <param name="fullName">类型全名</param>
+    public AttributeGenerateInfo(string fullName)
     {
-        TypeName = typeName;
+        FullName = fullName;
     }
 
     /// <inheritdoc/>
@@ -25,24 +25,17 @@ public class AttributeGenerateInfo
 
     /// <inheritdoc/>
     /// <param name="type">类型</param>
-    public AttributeGenerateInfo(ITypeSymbol type)
-    {
-        Type = type;
-    }
-
-    /// <inheritdoc/>
-    /// <param name="type">类型</param>
     /// <param name="params">参数</param>
     public AttributeGenerateInfo(ITypeSymbol type, params ParameterGenerateInfo[] @params)
     {
-        Type = type;
+        TypeName = type.GetName();
         Params = new(@params);
     }
 
     /// <summary>
-    /// 类型
+    /// 全名
     /// </summary>
-    public ITypeSymbol? Type { get; set; }
+    public string FullName { get; set; } = string.Empty;
 
     /// <summary>
     /// 类型名称
@@ -57,10 +50,11 @@ public class AttributeGenerateInfo
     /// <inheritdoc/>
     public override string ToString()
     {
-        var typeName = Type is null ? TypeName : Type.GetName();
+        if (string.IsNullOrWhiteSpace(FullName) is false)
+            return FullName;
         if (Params is null || Params.Count == 0)
-            return $"[{typeName}]";
+            return $"[{TypeName}]";
         else
-            return $"[{typeName}({string.Join(",", Params)})]";
+            return $"[{TypeName}({string.Join(",", Params)})]";
     }
 }

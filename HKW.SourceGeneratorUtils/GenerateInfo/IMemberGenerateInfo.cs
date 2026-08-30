@@ -23,17 +23,17 @@ public interface IMemberGenerateInfo
     public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <summary>
+    /// 添加默认特性
+    /// </summary>
+    public bool AddDefaultAttributes { get; set; }
+
+    /// <summary>
     /// 名称
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// 类型
-    /// </summary>
-    public ITypeSymbol? Type { get; set; }
-
-    /// <summary>
-    /// 类型名称, 若 <see cref="Type"/> 存在则使用 <see cref="Type"/> 生成名称
+    /// 类型名称
     /// </summary>
     public string TypeName { get; set; }
 

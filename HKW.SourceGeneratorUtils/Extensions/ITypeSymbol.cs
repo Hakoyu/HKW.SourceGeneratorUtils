@@ -15,7 +15,7 @@ public static class ITypeSymbolExtensions
     /// </summary>
     /// <param name="symbol">符号</param>
     /// <param name="otherSymbol">另一个符号</param>
-    /// <returns></returns>
+    /// <returns>是否相等</returns>
     public static bool SymbolEquals(this ISymbol symbol, ISymbol otherSymbol)
     {
         return SymbolEqualityComparer.Default.Equals(symbol, otherSymbol);
@@ -30,30 +30,33 @@ public static class ITypeSymbolExtensions
     {
         if (typeSymbol is INamedTypeSymbol { TypeArguments.Length: 1 } namedTypeSymbol)
             return namedTypeSymbol.TypeArguments[0];
-        return SourceGeneratorExtensions.TypeVoid;
+        return SourceGeneratorHelper.TypeVoid;
     }
 
     /// <summary>
     /// 是空类型
     /// </summary>
     /// <param name="symbol">符号类型</param>
-    /// <returns></returns>
+    /// <returns>是否空类型</returns>
     public static bool IsVoid(this ISymbol symbol)
     {
-        return SymbolEqualityComparer.Default.Equals(symbol, SourceGeneratorExtensions.TypeVoid);
+        return SymbolEqualityComparer.Default.Equals(symbol, SourceGeneratorHelper.TypeVoid);
     }
 
     /// <summary>
     /// 获取任务返回值
     /// </summary>
-    /// <param name="symbol"></param>
+    /// <param name="symbol">符号</param>
     /// <returns>如果类型是 <see cref="Task{T}"/> 则返回结果, 否则返回 <see langword="null"/></returns>
     public static INamedTypeSymbol? GetTaskResult(this ITypeSymbol symbol)
     {
         var currentType = symbol;
         while (currentType != null)
         {
-            if (currentType.OriginalDefinition?.ToString() == CommonData.TaskResultFullName)
+            if (
+                currentType.OriginalDefinition?.ToString()
+                == SourceGeneratorHelper.TaskResultFullName
+            )
                 return ((INamedTypeSymbol)currentType).TypeArguments[0] as INamedTypeSymbol;
             currentType = currentType.BaseType;
         }
@@ -84,23 +87,6 @@ public static class ITypeSymbolExtensions
     }
 
     /// <summary>
-    /// 获取全名和泛型
-    /// </summary>
-    /// <param name="typeSymbol"></param>
-    /// <returns></returns>
-    public static string GetFullNameAndGeneric(this ISymbol typeSymbol)
-    {
-        if (typeSymbol is INamedTypeSymbol namedTypeSymbol)
-        {
-            return namedTypeSymbol.ToString();
-        }
-        else
-        {
-            return typeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-        }
-    }
-
-    /// <summary>
     /// 继承自基类类型
     /// </summary>
     /// <param name="typeSymbol">符号类型</param>
@@ -124,40 +110,5 @@ public static class ITypeSymbolExtensions
             currentType = currentType.BaseType;
         }
         return false;
-    }
-
-    /// <summary>
-    /// 获取第一个特性数据
-    /// </summary>
-    /// <param name="typeSymbol"></param>
-    /// <param name="attributeName">特性名称</param>
-    /// <returns></returns>
-    public static AttributeData? GetFirstAttribute(
-        this ITypeSymbol typeSymbol,
-        string attributeName
-    )
-    {
-        return typeSymbol
-            .GetAttributes()
-            .FirstOrDefault(x => x.AttributeClass!.ToString() == attributeName);
-    }
-
-    /// <summary>
-    /// 尝试获取第一个特征数据
-    /// </summary>
-    /// <param name="typeSymbol"></param>
-    /// <param name="attributeName">特征名称</param>
-    /// <param name="attributeData">特征数据</param>
-    /// <returns>是否获取成功</returns>
-    public static bool TryGetFirstAttribute(
-        this ITypeSymbol typeSymbol,
-        string attributeName,
-        out AttributeData attributeData
-    )
-    {
-        attributeData = typeSymbol
-            .GetAttributes()
-            .FirstOrDefault(x => x.AttributeClass!.ToString() == attributeName)!;
-        return attributeData is not null;
     }
 }

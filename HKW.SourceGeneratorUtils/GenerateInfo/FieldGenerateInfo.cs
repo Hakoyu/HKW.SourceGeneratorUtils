@@ -1,5 +1,4 @@
 ﻿using System.CodeDom.Compiler;
-using HKW.SourceGeneratorUtils.Extensions;
 using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtils;
@@ -9,13 +8,18 @@ namespace HKW.SourceGeneratorUtils;
 /// </summary>
 public class FieldGenerateInfo : IMemberGenerateInfo
 {
+    /// <summary>
+    /// 默认特性
+    /// </summary>
+    public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
+
     /// <inheritdoc/>
     /// <param name="name">名称</param>
     /// <param name="type">类型</param>
     public FieldGenerateInfo(string name, ITypeSymbol type)
     {
         Name = name;
-        Type = type;
+        TypeName = type.GetName();
     }
 
     /// <inheritdoc/>
@@ -34,13 +38,13 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <inheritdoc/>
+    public bool AddDefaultAttributes { get; set; } = true;
+
+    /// <inheritdoc/>
     public string Name { get; set; }
 
     /// <inheritdoc/>
-    public ITypeSymbol? Type { get; set; }
-
-    /// <inheritdoc/>
-    public string TypeName { get; set; } = string.Empty;
+    public string TypeName { get; set; }
 
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
@@ -69,10 +73,11 @@ public class FieldGenerateInfo : IMemberGenerateInfo
 
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
+        if (AddDefaultAttributes)
+            writer.WriteLineCollection(DefaultAttributes);
 
-        var typeName = Type is null ? TypeName : Type.GetName();
-        writer.WriteIf(Accessibility.ToStr(), " ");
-        writer.Write(typeName);
+        writer.WriteIf(Accessibility.ToCode(), " ");
+        writer.Write(TypeName);
         writer.Write(' ');
         writer.Write(Name);
 

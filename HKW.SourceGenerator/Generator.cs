@@ -22,7 +22,7 @@ internal partial class Generator : IIncrementalGenerator
             compilation,
             static (spc, compilation) =>
             {
-                SourceGeneratorExtensions.Initialize(compilation);
+                SourceGeneratorHelper.Initialize(compilation);
                 var assemblyInfo = new AssemblyInfo(spc, compilation);
                 foreach (var syntaxTree in compilation.SyntaxTrees)
                 {
@@ -70,11 +70,7 @@ internal partial class Generator : IIncrementalGenerator
                 var method = property.GetGetMethodStr(out var isFunc);
                 if (isFunc)
                 {
-                    var info = new MethodGenerateInfo(
-                        $"{property.Name}Func<T>",
-                        property.Type,
-                        method
-                    )
+                    var info = new MethodGenerateInfo($"{property.Name}Func", property.Type, method)
                     {
                         Accessibility = Accessibility.Public,
                         Comment = """
@@ -82,8 +78,6 @@ internal partial class Generator : IIncrementalGenerator
                             /// bbb
                             /// ccc
                             """,
-                        Params = [new("t", "T") { Default = "1" }],
-                        Constraints = [new("T", "notnull")],
                     };
                     infos.Add(info);
                 }

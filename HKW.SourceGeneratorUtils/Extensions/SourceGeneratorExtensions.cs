@@ -11,23 +11,6 @@ namespace HKW.SourceGeneratorUtils;
 /// </summary>
 public static class SourceGeneratorExtensions
 {
-    internal static Compilation Compilation = null!;
-
-    /// <summary>
-    /// Void类型
-    /// </summary>
-    public static ITypeSymbol TypeVoid { get; private set; } = null!;
-
-    /// <summary>
-    /// 初始化
-    /// </summary>
-    /// <param name="compilation"></param>
-    public static void Initialize(Compilation compilation)
-    {
-        Compilation = compilation;
-        TypeVoid = Compilation.GetSpecialType(SpecialType.System_Void);
-    }
-
     /// <summary>
     /// 从当前类中查找成员
     /// </summary>
@@ -107,11 +90,11 @@ public static class SourceGeneratorExtensions
     }
 
     /// <summary>
-    /// 到字符串
+    /// 转换为代码
     /// </summary>
-    /// <param name="accessibility"></param>
-    /// <returns>字符串</returns>
-    public static string ToStr(this Accessibility accessibility)
+    /// <param name="accessibility">可访问性</param>
+    /// <returns>代码</returns>
+    public static string ToCode(this Accessibility accessibility)
     {
         return accessibility switch
         {
@@ -128,19 +111,89 @@ public static class SourceGeneratorExtensions
     }
 
     /// <summary>
-    /// 到字符串
+    /// 转换为代码
     /// </summary>
-    /// <param name="methodType"></param>
-    /// <returns></returns>
-    public static string ToStr(this MethodGenerateType methodType)
+    /// <param name="generateType">生成类型</param>
+    /// <returns>代码</returns>
+    public static string ToCode(this MethodGenerateType generateType)
     {
-        return methodType switch
+        return generateType switch
         {
             MethodGenerateType.Static => "static",
             MethodGenerateType.Partial => "partial",
             MethodGenerateType.Override => "override",
             MethodGenerateType.Abstract => "abstract",
             MethodGenerateType.Virtual => "virtual",
+            _ => "",
+        };
+    }
+
+    /// <summary>
+    /// 转换为代码
+    /// </summary>
+    /// <param name="generateType">参数类型</param>
+    /// <returns>代码</returns>
+    public static string ToCode(this ParameterGenerateType generateType)
+    {
+        return generateType switch
+        {
+            ParameterGenerateType.Ref => "ref",
+            ParameterGenerateType.Out => "out",
+            ParameterGenerateType.In => "in",
+            _ => "",
+        };
+    }
+
+    /// <summary>
+    /// 转换为代码
+    /// </summary>
+    /// <param name="generateType">生成类型</param>
+    /// <returns>代码</returns>
+    public static string ToCode(this PropertyMethodGenerateType generateType)
+    {
+        return generateType switch
+        {
+            PropertyMethodGenerateType.Get => "get",
+            PropertyMethodGenerateType.Set => "set",
+            _ => throw new NotSupportedException(),
+        };
+    }
+
+    /// <summary>
+    /// 转换为代码
+    /// </summary>
+    /// <param name="generateType">生成类型</param>
+    /// <returns>代码</returns>
+    public static string ToCode(this ObjectGenerateType generateType)
+    {
+        return generateType switch
+        {
+            ObjectGenerateType.Class => "class",
+            ObjectGenerateType.StaticClass => "static class",
+            ObjectGenerateType.PartialClass => "partial class",
+            ObjectGenerateType.StaticPartialClass => "static partial class",
+            ObjectGenerateType.AbstractClass => "abstract class",
+            ObjectGenerateType.AbstractPartialClass => "abstract partial class",
+            ObjectGenerateType.SealedClass => "sealed class",
+            ObjectGenerateType.SealedPartialClass => "sealed partial class",
+            ObjectGenerateType.Struct => "struct",
+            ObjectGenerateType.PartialStruct => "partial struct",
+            ObjectGenerateType.ReadOnlyStruct => "readonly struct",
+            ObjectGenerateType.ReadOnlyPartialStruct => "readonly partial struct",
+            ObjectGenerateType.RefStruct => "ref struct",
+            ObjectGenerateType.PartialRefStruct => "partial ref struct",
+            ObjectGenerateType.ReadOnlyRefStruct => "readonly ref struct",
+            ObjectGenerateType.ReadOnlyPartialRefStruct => "readonly partial ref struct",
+            ObjectGenerateType.Record => "record",
+            ObjectGenerateType.PartialRecord => "partial record",
+            ObjectGenerateType.AbstractRecord => "abstract record",
+            ObjectGenerateType.AbstractPartialRecord => "abstract partial record",
+            ObjectGenerateType.SealedRecord => "sealed record",
+            ObjectGenerateType.SealedPartialRecord => "sealed partial record",
+            ObjectGenerateType.RecordStruct => "record struct",
+            ObjectGenerateType.PartialRecordStruct => "partial record struct",
+            ObjectGenerateType.ReadOnlyRecordStruct => "readonly record struct",
+            ObjectGenerateType.ReadOnlyPartialRecordStruct => "readonly partial record struct",
             _ => "",
         };
     }

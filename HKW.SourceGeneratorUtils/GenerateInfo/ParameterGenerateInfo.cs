@@ -9,39 +9,6 @@ public class ParameterGenerateInfo
 {
     /// <inheritdoc/>
     /// <param name="name">名称</param>
-    /// <param name="type">类型</param>
-    public ParameterGenerateInfo(string name, ITypeSymbol type)
-    {
-        Name = name;
-        Type = type;
-    }
-
-    /// <inheritdoc/>
-    /// <param name="name">名称</param>
-    /// <param name="type">类型</param>
-    /// <param name="attributes">特性</param>
-    public ParameterGenerateInfo(
-        string name,
-        ITypeSymbol type,
-        params AttributeGenerateInfo[] attributes
-    )
-    {
-        Name = name;
-        Type = type;
-        Attributes = new(attributes);
-    }
-
-    /// <inheritdoc/>
-    /// <param name="name">名称</param>
-    /// <param name="typeName">类型名称</param>
-    public ParameterGenerateInfo(string name, string typeName)
-    {
-        Name = name;
-        TypeName = typeName;
-    }
-
-    /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="typeName">类型名称</param>
     /// <param name="attributes">特性</param>
     public ParameterGenerateInfo(
@@ -61,14 +28,14 @@ public class ParameterGenerateInfo
     public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <summary>
-    /// 类型
+    /// 参数类型
     /// </summary>
-    public ITypeSymbol? Type { get; set; }
+    public ParameterGenerateType GenerateType { get; set; }
 
     /// <summary>
     /// 类型名称
     /// </summary>
-    public string TypeName { get; set; } = string.Empty;
+    public string TypeName { get; set; }
 
     /// <summary>
     /// 名称
@@ -87,10 +54,39 @@ public class ParameterGenerateInfo
         if (Attributes is not null && Attributes.Count > 0)
             att = string.Join("", Attributes) + " ";
 
+        var paramType = string.Empty;
+        if (GenerateType != ParameterGenerateType.None)
+            paramType = GenerateType.ToString() + " ";
+
         var def = string.Empty;
         if (string.IsNullOrWhiteSpace(Default) is false)
             def = $" = {Default}";
-        var typeName = Type is null ? TypeName : Type.GetName();
-        return $"{att}{typeName} {Name}{def}";
+        return $"{att}{paramType}{TypeName} {Name}{def}";
     }
+}
+
+/// <summary>
+/// 参数传递类型
+/// </summary>
+public enum ParameterGenerateType
+{
+    /// <summary>
+    /// 无修饰符
+    /// </summary>
+    None,
+
+    /// <summary>
+    /// 按引用传递
+    /// </summary>
+    Ref,
+
+    /// <summary>
+    /// 输出参数
+    /// </summary>
+    Out,
+
+    /// <summary>
+    /// 只读引用参数
+    /// </summary>
+    In,
 }

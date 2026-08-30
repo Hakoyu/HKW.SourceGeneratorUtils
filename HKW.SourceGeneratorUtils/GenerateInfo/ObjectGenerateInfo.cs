@@ -1,21 +1,31 @@
 ﻿using System.CodeDom.Compiler;
-using HKW.SourceGeneratorUtils.Extensions;
 using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtils;
+
+//public class FileGenerateInfo
+//{
+//    public
+//    public string NameSpace { get; set; }
+//}
 
 /// <summary>
 /// 对象构建信息
 /// </summary>
 public class ObjectGenerateInfo
 {
+    /// <summary>
+    /// 默认特性
+    /// </summary>
+    public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
+
     /// <inheritdoc/>
     /// <param name="name">名称</param>
-    /// <param name="typeName">类型名称</param>
-    public ObjectGenerateInfo(string name, string typeName)
+    /// <param name="type">类型名称</param>
+    public ObjectGenerateInfo(string name, ObjectGenerateType type)
     {
         Name = name;
-        TypeName = typeName;
+        GenerateType = type;
     }
 
     /// <summary>
@@ -29,6 +39,11 @@ public class ObjectGenerateInfo
     public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <summary>
+    /// 添加默认特性
+    /// </summary>
+    public bool AddDefaultAttributes { get; set; } = true;
+
+    /// <summary>
     /// 可访问性
     /// </summary>
     public Accessibility Accessibility { get; set; }
@@ -39,9 +54,9 @@ public class ObjectGenerateInfo
     public string Name { get; set; }
 
     /// <summary>
-    /// 类型名称, 如 <c>class</c>, <c>sealed class</c>, <c>struct</c>
+    /// 生成类型
     /// </summary>
-    public string TypeName { get; set; }
+    public ObjectGenerateType GenerateType { get; set; }
 
     /// <summary>
     /// 构造函数
@@ -68,9 +83,11 @@ public class ObjectGenerateInfo
 
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
+        if (AddDefaultAttributes)
+            writer.WriteLineCollection(DefaultAttributes);
 
-        writer.WriteIf(Accessibility.ToStr(), " ");
-        writer.Write(TypeName);
+        writer.WriteIf(Accessibility.ToCode(), " ");
+        writer.Write(GenerateType.ToCode());
         writer.Write(' ');
         writer.Write(Name);
 
@@ -161,7 +178,7 @@ public class ConstructorGenerateInfo
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
 
-        writer.WriteIf(Accessibility.ToStr(), " ");
+        writer.WriteIf(Accessibility.ToCode(), " ");
         writer.Write(' ');
         writer.Write(Name);
         writer.Write('(');
@@ -182,4 +199,140 @@ public class ConstructorGenerateInfo
         writer.Indent--;
         writer.WriteLine("}");
     }
+}
+
+/// <summary>
+/// 对象类型
+/// </summary>
+public enum ObjectGenerateType
+{
+    /// <summary>
+    /// 类
+    /// </summary>
+    Class,
+
+    /// <summary>
+    /// 静态类
+    /// </summary>
+    StaticClass,
+
+    /// <summary>
+    /// 部分类
+    /// </summary>
+    PartialClass,
+
+    /// <summary>
+    /// 静态部分类
+    /// </summary>
+    StaticPartialClass,
+
+    /// <summary>
+    /// 抽象类
+    /// </summary>
+    AbstractClass,
+
+    /// <summary>
+    /// 抽象部分类
+    /// </summary>
+    AbstractPartialClass,
+
+    /// <summary>
+    /// 密封类
+    /// </summary>
+    SealedClass,
+
+    /// <summary>
+    /// 密封部分类
+    /// </summary>
+    SealedPartialClass,
+
+    /// <summary>
+    /// 结构体
+    /// </summary>
+    Struct,
+
+    /// <summary>
+    /// 部分结构体
+    /// </summary>
+    PartialStruct,
+
+    /// <summary>
+    /// 只读结构体
+    /// </summary>
+    ReadOnlyStruct,
+
+    /// <summary>
+    /// 只读部分结构体
+    /// </summary>
+    ReadOnlyPartialStruct,
+
+    /// <summary>
+    /// 引用结构体
+    /// </summary>
+    RefStruct,
+
+    /// <summary>
+    /// 部分引用结构体
+    /// </summary>
+    PartialRefStruct,
+
+    /// <summary>
+    /// 只读引用结构体
+    /// </summary>
+    ReadOnlyRefStruct,
+
+    /// <summary>
+    /// 只读部分引用结构体
+    /// </summary>
+    ReadOnlyPartialRefStruct,
+
+    /// <summary>
+    /// 记录
+    /// </summary>
+    Record,
+
+    /// <summary>
+    /// 部分记录
+    /// </summary>
+    PartialRecord,
+
+    /// <summary>
+    /// 抽象记录
+    /// </summary>
+    AbstractRecord,
+
+    /// <summary>
+    /// 抽象部分记录
+    /// </summary>
+    AbstractPartialRecord,
+
+    /// <summary>
+    /// 密封记录
+    /// </summary>
+    SealedRecord,
+
+    /// <summary>
+    /// 密封部分记录
+    /// </summary>
+    SealedPartialRecord,
+
+    /// <summary>
+    /// 记录结构体
+    /// </summary>
+    RecordStruct,
+
+    /// <summary>
+    /// 部分记录结构体
+    /// </summary>
+    PartialRecordStruct,
+
+    /// <summary>
+    /// 只读记录结构体
+    /// </summary>
+    ReadOnlyRecordStruct,
+
+    /// <summary>
+    /// 只读部分记录结构体
+    /// </summary>
+    ReadOnlyPartialRecordStruct,
 }

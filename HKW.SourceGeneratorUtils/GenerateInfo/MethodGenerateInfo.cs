@@ -1,5 +1,4 @@
 ﻿using System.CodeDom.Compiler;
-using HKW.SourceGeneratorUtils.Extensions;
 using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtils;
@@ -9,6 +8,11 @@ namespace HKW.SourceGeneratorUtils;
 /// </summary>
 public class MethodGenerateInfo : IMemberGenerateInfo
 {
+    /// <summary>
+    /// 默认特性
+    /// </summary>
+    public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
+
     /// <inheritdoc/>
     /// <param name="name">名称</param>
     /// <param name="type">类型</param>
@@ -16,7 +20,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     public MethodGenerateInfo(string name, ITypeSymbol type, string content)
     {
         Name = name;
-        Type = type;
+        TypeName = type.GetName();
         Content = content;
     }
 
@@ -38,13 +42,13 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <inheritdoc/>
+    public bool AddDefaultAttributes { get; set; } = true;
+
+    /// <inheritdoc/>
     public string Name { get; set; }
 
     /// <inheritdoc/>
-    public ITypeSymbol? Type { get; set; }
-
-    /// <inheritdoc/>
-    public string TypeName { get; set; } = string.Empty;
+    public string TypeName { get; set; }
 
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
@@ -63,9 +67,14 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     public string Content { get; set; }
 
     /// <summary>
-    /// 方法类型
+    /// 内容行
     /// </summary>
-    public MethodGenerateType MethodType { get; set; }
+    public List<string> ContentLines { get; set; } = [];
+
+    /// <summary>
+    /// 生成类型
+    /// </summary>
+    public MethodGenerateType GenerateType { get; set; }
 
     /// <inheritdoc/>
     public override string ToString()
@@ -83,12 +92,13 @@ public class MethodGenerateInfo : IMemberGenerateInfo
 
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
-        var typeName = Type is null ? TypeName : Type.GetName();
-        if (MethodType == MethodGenerateType.Partial)
+        if (AddDefaultAttributes)
+            writer.WriteLineCollection(DefaultAttributes);
+        if (GenerateType == MethodGenerateType.Partial)
         {
-            writer.Write(MethodType.ToStr());
+            writer.Write(GenerateType.ToCode());
             writer.Write(' ');
-            writer.Write(typeName);
+            writer.Write(TypeName);
             writer.Write(' ');
             writer.Write(Name);
             writer.Write('(');
@@ -98,9 +108,9 @@ public class MethodGenerateInfo : IMemberGenerateInfo
         }
         else
         {
-            writer.WriteIf(Accessibility.ToStr(), " ");
-            writer.WriteIf(MethodType.ToStr(), " ");
-            writer.Write(typeName);
+            writer.WriteIf(Accessibility.ToCode(), " ");
+            writer.WriteIf(GenerateType.ToCode(), " ");
+            writer.Write(TypeName);
             writer.Write(' ');
             writer.Write(Name);
             writer.Write('(');
@@ -115,6 +125,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
             writer.WriteLine("{");
             writer.Indent++;
             writer.WriteLine(Content);
+            writer.WriteLineCollection(ContentLines);
             writer.Indent--;
             writer.WriteLine("}");
         }
@@ -122,7 +133,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
 }
 
 /// <summary>
-/// 方法类型
+/// 方法生成类型
 /// </summary>
 public enum MethodGenerateType
 {

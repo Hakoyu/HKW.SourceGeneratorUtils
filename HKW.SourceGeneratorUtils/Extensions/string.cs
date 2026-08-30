@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HKW.SourceGeneratorUtils.Extensions;
+namespace HKW.SourceGeneratorUtils;
 
 /// <summary>
 ///

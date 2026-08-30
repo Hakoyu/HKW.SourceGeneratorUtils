@@ -1,5 +1,4 @@
 ﻿using System.CodeDom.Compiler;
-using HKW.SourceGeneratorUtils.Extensions;
 using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtils;
@@ -9,22 +8,35 @@ namespace HKW.SourceGeneratorUtils;
 /// </summary>
 public class PropertyGenerateInfo : IMemberGenerateInfo
 {
+    /// <summary>
+    /// 默认特性
+    /// </summary>
+    public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
+
     /// <inheritdoc/>
     /// <param name="name">名称</param>
     /// <param name="type">类型</param>
-    public PropertyGenerateInfo(string name, ITypeSymbol type)
-    {
-        Name = name;
-        Type = type;
-    }
+    /// <param name="getMethod">Get方法</param>
+    public PropertyGenerateInfo(
+        string name,
+        ITypeSymbol type,
+        PropertyGetMethodGenerateInfo getMethod
+    )
+        : this(name, type.GetName(), getMethod) { }
 
     /// <inheritdoc/>
     /// <param name="name">名称</param>
     /// <param name="typeName">类型名称</param>
-    public PropertyGenerateInfo(string name, string typeName)
+    /// <param name="getMethod">Get方法</param>
+    public PropertyGenerateInfo(
+        string name,
+        string typeName,
+        PropertyGetMethodGenerateInfo getMethod
+    )
     {
         Name = name;
         TypeName = typeName;
+        GetMethod = getMethod;
     }
 
     /// <inheritdoc/>
@@ -34,13 +46,13 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
     public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <inheritdoc/>
+    public bool AddDefaultAttributes { get; set; } = true;
+
+    /// <inheritdoc/>
     public string Name { get; set; }
 
     /// <inheritdoc/>
-    public ITypeSymbol? Type { get; set; }
-
-    /// <inheritdoc/>
-    public string TypeName { get; set; } = string.Empty;
+    public string TypeName { get; set; }
 
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
@@ -49,16 +61,14 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
     public string Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// Get 方法内容。<see langword="null"/> 表示不生成，<c>;</c> 表示自动访问器，
-    /// <c>{...}</c> 表示访问器主体。
+    /// Get 方法
     /// </summary>
-    public string? GetMethod { get; set; }
+    public PropertyGetMethodGenerateInfo GetMethod { get; set; }
 
     /// <summary>
-    /// Set 方法内容。<see langword="null"/> 表示不生成，<c>;</c> 表示自动访问器，
-    /// <c>{...}</c> 表示访问器主体。
+    /// Set 方法
     /// </summary>
-    public string? SetMethod { get; set; }
+    public PropertySetMethodGenerateInfo? SetMethod { get; set; }
 
     /// <summary>
     /// 默认值
@@ -81,10 +91,11 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
 
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
+        if (AddDefaultAttributes)
+            writer.WriteLineCollection(DefaultAttributes);
 
-        var typeName = Type is null ? TypeName : Type.GetName();
-        writer.WriteIf(Accessibility.ToStr(), " ");
-        writer.Write(typeName);
+        writer.WriteIf(Accessibility.ToCode(), " ");
+        writer.Write(TypeName);
         writer.Write(' ');
         writer.Write(Name);
         writer.WriteLine();
@@ -92,28 +103,108 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
         writer.WriteLine("{");
         writer.Indent++;
 
-        WriteAccessor(writer, "get", GetMethod);
-        WriteAccessor(writer, "set", SetMethod);
+        GetMethod?.WriteTo(writer);
+        SetMethod?.WriteTo(writer);
 
         writer.Indent--;
         writer.Write("}");
 
         if (string.IsNullOrWhiteSpace(Default) is false)
+        {
             writer.Write($" = {Default}");
-
-        writer.WriteLine(";");
+            writer.WriteLine(";");
+        }
     }
+}
 
-    private static void WriteAccessor(
-        IndentedTextWriter writer,
-        string accessorName,
-        string? accessorMethod
-    )
+/// <summary>
+/// 属性Get方法生成信息
+/// </summary>
+public class PropertyGetMethodGenerateInfo : PropertyMethodGenerateInfo
+{
+    /// <inheritdoc/>
+    /// <param name="content">内容</param>
+    public PropertyGetMethodGenerateInfo(string content)
+        : base(content, PropertyMethodGenerateType.Get) { }
+}
+
+/// <summary>
+/// 属性Set方法生成信息
+/// </summary>
+public class PropertySetMethodGenerateInfo : PropertyMethodGenerateInfo
+{
+    /// <inheritdoc/>
+    /// <param name="content">内容</param>
+    public PropertySetMethodGenerateInfo(string content)
+        : base(content, PropertyMethodGenerateType.Set) { }
+}
+
+/// <summary>
+/// 属性方法生成信息
+/// <para>
+/// <see langword="null"/> 表示不生成，<c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体。
+/// </para>
+/// </summary>
+public class PropertyMethodGenerateInfo
+{
+    /// <inheritdoc/>
+    /// <param name="content">内容</param>
+    /// <param name="generateType">生成类型</param>
+    public PropertyMethodGenerateInfo(string content, PropertyMethodGenerateType generateType)
     {
-        if (accessorMethod is null)
-            return;
-
-        writer.Write(accessorName);
-        writer.WriteLine(accessorMethod);
+        Content = content;
+        GenerateType = generateType;
     }
+
+    /// <summary>
+    /// 可访问性
+    /// </summary>
+    public Accessibility Accessibility { get; set; }
+
+    /// <summary>
+    /// 生成类型
+    /// </summary>
+    public PropertyMethodGenerateType GenerateType { get; set; }
+
+    /// <summary>
+    /// 内容
+    /// </summary>
+    public string Content { get; set; }
+
+    /// <inheritdoc/>
+    public override string ToString()
+    {
+        var stringStream = new StringWriter();
+        var writer = new IndentedTextWriter(stringStream);
+        WriteTo(writer);
+        return stringStream.ToString();
+    }
+
+    /// <inheritdoc/>
+    public void WriteTo(IndentedTextWriter writer)
+    {
+        writer.Write(Accessibility.ToCode());
+        writer.Write(GenerateType.ToCode());
+
+        if (Content == ";" || Content.StartsWith("=>"))
+            writer.WriteLine(Content);
+        else
+            writer.WriteLineCollection(Content.SplitLine());
+    }
+}
+
+/// <summary>
+/// 属性方法生成类型
+/// </summary>
+public enum PropertyMethodGenerateType
+{
+    /// <summary>
+    /// Get方法
+    /// </summary>
+    Get,
+
+    /// <summary>
+    /// Set方法
+    /// </summary>
+    Set,
 }
