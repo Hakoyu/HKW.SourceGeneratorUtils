@@ -1,4 +1,5 @@
 ﻿using System.CodeDom.Compiler;
+using System.Text;
 using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtils;
@@ -18,11 +19,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     /// <param name="type">类型</param>
     /// <param name="content">内容</param>
     public MethodGenerateInfo(string name, ITypeSymbol type, string content)
-    {
-        Name = name;
-        TypeName = type.GetName();
-        Content = content;
-    }
+        : this(name, type.GetName(), content) { }
 
     /// <inheritdoc/>
     /// <param name="name">名称</param>
@@ -32,7 +29,26 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     {
         Name = name;
         TypeName = typeName;
-        Content = content;
+        if (string.IsNullOrWhiteSpace(content) is false)
+            Contents.Add(content);
+    }
+
+    /// <inheritdoc/>
+    /// <param name="name">名称</param>
+    /// <param name="type">类型</param>
+    /// <param name="contents">内容</param>
+    public MethodGenerateInfo(string name, ITypeSymbol type, IEnumerable<string> contents)
+        : this(name, type.GetName(), contents) { }
+
+    /// <inheritdoc/>
+    /// <param name="name">名称</param>
+    /// <param name="typeName">类型</param>
+    /// <param name="contents">内容</param>
+    public MethodGenerateInfo(string name, string typeName, IEnumerable<string> contents)
+    {
+        Name = name;
+        TypeName = typeName;
+        Contents.AddRange(contents);
     }
 
     /// <inheritdoc/>
@@ -63,13 +79,10 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     /// </summary>
     public List<GenericConstraintInfo>? Constraints { get; set; }
 
-    /// <inheritdoc/>
-    public string Content { get; set; }
-
     /// <summary>
-    /// 内容行
+    /// 内容
     /// </summary>
-    public List<string> ContentLines { get; set; } = [];
+    public List<string> Contents { get; set; } = [];
 
     /// <summary>
     /// 生成类型
@@ -124,8 +137,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
 
             writer.WriteLine("{");
             writer.Indent++;
-            writer.WriteLine(Content);
-            writer.WriteLineCollection(ContentLines);
+            writer.WriteLineCollection(Contents);
             writer.Indent--;
             writer.WriteLine("}");
         }

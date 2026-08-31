@@ -56,7 +56,7 @@ public class ParameterGenerateInfo
 
         var paramType = string.Empty;
         if (GenerateType != ParameterGenerateType.None)
-            paramType = GenerateType.ToString() + " ";
+            paramType = GenerateType.ToCode() + " ";
 
         var def = string.Empty;
         if (string.IsNullOrWhiteSpace(Default) is false)

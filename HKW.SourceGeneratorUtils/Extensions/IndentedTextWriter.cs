@@ -132,6 +132,74 @@ public static class IndentedTextWriterExtensions
             _ => false,
         };
     }
+
+    //public const string DefaultTabString = "    ";
+
+    //public static TabString[] TabStrings { get; set; } = [new(' ', 4), new('\t', 1)];
+
+    //public static string TrimIndent(this string str, int indent)
+    //{
+    //    if (indent < 0)
+    //        throw new ArgumentOutOfRangeException(nameof(indent));
+
+    //    if (str.Length == 0)
+    //        return str;
+
+    //    var sb = new StringBuilder(str);
+    //    for (var i = 0; i < str.Length; i++)
+    //    {
+    //        var c = str[i];
+    //        var j = 0;
+    //        for (; j < TabStrings.Length; j++)
+    //        {
+    //            if (TabStrings[j].Char == c)
+    //            {
+    //                sb.Remove(0, 1);
+    //                break;
+    //            }
+    //        }
+    //        if (j == TabStrings.Length)
+    //            break;
+    //    }
+    //    for (var i = 0; i < indent; i++)
+    //        sb.Insert(0, DefaultTabString);
+    //    return sb.ToString();
+    //}
+    //public static string TrimIndent(this string str, int indent)
+    //{
+    //    if (indent < 0)
+    //        throw new ArgumentOutOfRangeException(nameof(indent));
+
+    //    if (str.Length == 0)
+    //        return str;
+    //    for (var i = 0; i < TabStrings.Length; i++)
+    //        if (TabStrings[i].Char != str[0])
+    //            return str;
+
+    //    var sb = new StringBuilder(str);
+    //    var tabCharCounts = new int[TabStrings.Length];
+    //    for (var i = 0; i < str.Length; i++)
+    //    {
+    //        var c = str[i];
+    //        for (var j = 0; j < TabStrings.Length; j++)
+    //        {
+    //            if (TabStrings[j].Char == c)
+    //            {
+    //                tabCharCounts[j]++;
+    //                sb.Remove(0, 1);
+    //                break;
+    //            }
+    //            else
+    //                i = str.Length;
+    //        }
+    //    }
+    //    var count = 0;
+    //    for (var i = 0; i < tabCharCounts.Length; i++)
+    //        count += (int)Math.Ceiling((double)tabCharCounts[i] / TabStrings[i].Count);
+    //    for (var i = 0; i < count; i++)
+    //        sb.Insert(0, DefaultTabString);
+    //    return sb.ToString();
+    //}
 }
 
 /// <summary>
@@ -153,4 +221,57 @@ public enum StringEmptyCheckMode
     /// 不是 <see langword="null"/> 或 <see cref="string.Empty"/> 或 空字符
     /// </summary>
     IsNotNullOrWhiteSpace = 3,
+}
+
+/// <summary>
+/// 缩进字符串
+/// </summary>
+public readonly struct TabString : IEquatable<char>
+{
+    /// <summary>
+    /// 字符串
+    /// </summary>
+    public readonly char Char;
+
+    /// <summary>
+    /// 数量
+    /// </summary>
+    public readonly int Count;
+
+    /// <inheritdoc/>
+    /// <summary>默认为<c>    </c>(四个空格)</summary>
+    public TabString()
+    {
+        Char = ' ';
+        Count = 4;
+    }
+
+    /// <inheritdoc/>
+    /// <param name="char">字符</param>
+    /// <param name="count">数量</param>
+    public TabString(char @char, int count)
+    {
+        Char = @char;
+        Count = count;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(char other)
+    {
+        return Char == other;
+    }
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj)
+    {
+        if (obj is not char c)
+            return false;
+        return Equals(c);
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return Char.GetHashCode();
+    }
 }

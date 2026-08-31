@@ -11,22 +11,21 @@ namespace HKW.SourceGeneratorUtils;
 public static class IPropertySymbolExtensions
 {
     /// <summary>
-    /// 获取Get方法
+    /// 获取Get方法字符串
     /// </summary>
     /// <param name="propertySymbol">属性</param>
-    /// <param name="isFunc">使用自身静态方法</param>
-    /// <returns>属性Get方法信息</returns>
+    /// <returns>属性Get方法</returns>
     /// <remarks><code><![CDATA[
     ///
     /// /// IN:
     /// public string FullName => _fullName;
     /// /// OUT:
-    /// _fullName
+    /// return _fullName;
     ///
     /// /// IN:
     /// public string FullName => $"{FirstName}_{LastName}";
     /// /// OUT:
-    /// $"{FirstName}_{LastName}"
+    /// return $"{FirstName}_{LastName}";
     ///
     /// /// IN:
     /// public string FullName
@@ -34,11 +33,10 @@ public static class IPropertySymbolExtensions
     ///     get { return $"{FirstName}_{LastName}"; }
     /// }
     /// /// OUT:
-    /// { return $"{FirstName}_{LastName}"; }
+    /// return $"{FirstName}_{LastName}";
     /// ]]></code></remarks>
-    public static string? GetGetMethodStr(this IPropertySymbol propertySymbol, out bool isFunc)
+    public static string? GetGetMethodStr(this IPropertySymbol propertySymbol)
     {
-        isFunc = false;
         if (propertySymbol.GetMethod is null)
             return null;
         var getMethodStr = propertySymbol
@@ -49,7 +47,6 @@ public static class IPropertySymbolExtensions
         // 判断是否为get块
         if (getMethodStr.EndsWith("}"))
         {
-            isFunc = true;
             // 删除get块左右大括号
             sb.Remove(sb.Length - 1, 1);
             sb.Remove(0, getMethodStr.IndexOf("{") + 1);
@@ -58,7 +55,24 @@ public static class IPropertySymbolExtensions
         {
             // 删除表达式符号
             sb.Remove(0, getMethodStr.IndexOf("=>") + 2);
+            sb.Insert(0, "return ");
+            sb.Append(';');
         }
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// 尝试获取Get方法字符串
+    /// </summary>
+    /// <param name="propertySymbol">属性</param>
+    /// <param name="getMethodStr">Get方法字符串</param>
+    /// <returns>是否获取成功</returns>
+    public static bool TryGetGetMethodStr(
+        this IPropertySymbol propertySymbol,
+        out string getMethodStr
+    )
+    {
+        getMethodStr = GetGetMethodStr(propertySymbol)!;
+        return getMethodStr is null;
     }
 }

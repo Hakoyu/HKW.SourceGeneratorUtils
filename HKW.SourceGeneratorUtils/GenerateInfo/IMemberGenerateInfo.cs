@@ -43,11 +43,6 @@ public interface IMemberGenerateInfo
     public Accessibility Accessibility { get; set; }
 
     /// <summary>
-    /// 内容
-    /// </summary>
-    public string Content { get; set; }
-
-    /// <summary>
     /// 写入至
     /// </summary>
     /// <param name="writer">写入器</param>

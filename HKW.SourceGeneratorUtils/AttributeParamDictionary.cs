@@ -53,6 +53,8 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
     /// <returns>是否存在</returns>
     public bool TryGetParam<TValue>(string parameterName, out TValue paramValue)
     {
+        if (typeof(TValue).IsArray)
+            throw new NotSupportedException();
         var r = _dictionary.TryGetValue(parameterName, out var value);
         paramValue = r ? (TValue)value.Value! : default!;
         return r;

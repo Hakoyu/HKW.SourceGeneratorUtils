@@ -49,9 +49,6 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
 
-    /// <inheritdoc/>
-    public string Content { get; set; } = string.Empty;
-
     /// <summary>
     /// 默认值
     /// </summary>

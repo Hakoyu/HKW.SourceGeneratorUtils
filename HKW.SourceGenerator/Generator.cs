@@ -67,8 +67,8 @@ internal partial class Generator : IIncrementalGenerator
             var infos = new List<MethodGenerateInfo>();
             foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
             {
-                var method = property.GetGetMethodStr(out var isFunc);
-                if (isFunc)
+                var method = property.GetGetMethodStr();
+                if (method is not null)
                 {
                     var info = new MethodGenerateInfo($"{property.Name}Func", property.Type, method)
                     {
@@ -82,10 +82,12 @@ internal partial class Generator : IIncrementalGenerator
                     infos.Add(info);
                 }
             }
+            _writer.Indent++;
             foreach (var data in infos)
             {
                 data.WriteTo(_writer);
             }
+            _writer.Indent--;
             _writer.WriteLine("}");
             assemblyInfo.ProductionContext.AddSource(
                 $"TestSourceGenerator_{classSymbol.Name}.g.cs",
