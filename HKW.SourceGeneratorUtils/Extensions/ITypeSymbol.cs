@@ -30,7 +30,7 @@ public static class ITypeSymbolExtensions
     {
         if (typeSymbol is INamedTypeSymbol { TypeArguments.Length: 1 } namedTypeSymbol)
             return namedTypeSymbol.TypeArguments[0];
-        return SourceGeneratorHelper.TypeVoid;
+        return GeneratorHelper.TypeVoid;
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public static class ITypeSymbolExtensions
     /// <returns>是否空类型</returns>
     public static bool IsVoid(this ISymbol symbol)
     {
-        return SymbolEqualityComparer.Default.Equals(symbol, SourceGeneratorHelper.TypeVoid);
+        return SymbolEqualityComparer.Default.Equals(symbol, GeneratorHelper.TypeVoid);
     }
 
     /// <summary>
@@ -53,10 +53,7 @@ public static class ITypeSymbolExtensions
         var currentType = symbol;
         while (currentType != null)
         {
-            if (
-                currentType.OriginalDefinition?.ToString()
-                == SourceGeneratorHelper.TaskResultFullName
-            )
+            if (currentType.OriginalDefinition?.ToString() == GeneratorHelper.TaskResultFullName)
                 return ((INamedTypeSymbol)currentType).TypeArguments[0] as INamedTypeSymbol;
             currentType = currentType.BaseType;
         }

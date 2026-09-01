@@ -17,6 +17,6 @@ public static class SpecialTypeExtensions
     /// <returns>符号类型</returns>
     public static ITypeSymbol GetTypeSymbol(this SpecialType specialType)
     {
-        return SourceGeneratorHelper.Compilation.GetSpecialType(specialType);
+        return GeneratorHelper.Compilation.GetSpecialType(specialType);
     }
 }

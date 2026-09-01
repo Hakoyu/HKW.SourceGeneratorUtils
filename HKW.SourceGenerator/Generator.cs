@@ -22,19 +22,18 @@ internal partial class Generator : IIncrementalGenerator
             compilation,
             static (spc, compilation) =>
             {
-                SourceGeneratorHelper.Initialize(compilation);
-                var assemblyInfo = new AssemblyInfo(spc, compilation);
+                GeneratorHelper.Initialize(spc, compilation);
                 foreach (var syntaxTree in compilation.SyntaxTrees)
                 {
-                    ParseSyntaxTree(assemblyInfo, syntaxTree);
+                    ParseSyntaxTree(syntaxTree);
                 }
             }
         );
     }
 
-    private static void ParseSyntaxTree(AssemblyInfo assemblyInfo, SyntaxTree syntaxTree)
+    private static void ParseSyntaxTree(SyntaxTree syntaxTree)
     {
-        var semanticModel = assemblyInfo.Compilation.GetSemanticModel(syntaxTree);
+        var semanticModel = GeneratorHelper.Compilation.GetSemanticModel(syntaxTree);
         var syntaxTreeInfo = new SyntaxTreeInfo(syntaxTree, semanticModel);
         var declaredClasses = syntaxTree
             .GetRoot()
@@ -89,7 +88,7 @@ internal partial class Generator : IIncrementalGenerator
             }
             _writer.Indent--;
             _writer.WriteLine("}");
-            assemblyInfo.ProductionContext.AddSource(
+            GeneratorHelper.ProductionContext.AddSource(
                 $"TestSourceGenerator_{classSymbol.Name}.g.cs",
                 stringStream.ToString()
             );
