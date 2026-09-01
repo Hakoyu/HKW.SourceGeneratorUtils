@@ -140,6 +140,7 @@ public static class SourceGeneratorExtensions
             ParameterGenerateType.Ref => "ref",
             ParameterGenerateType.Out => "out",
             ParameterGenerateType.In => "in",
+            ParameterGenerateType.Params => "params",
             _ => "",
         };
     }

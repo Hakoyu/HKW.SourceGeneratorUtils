@@ -12,8 +12,8 @@ public class ParameterGenerateInfo
     /// <param name="typeName">类型名称</param>
     /// <param name="attributes">特性</param>
     public ParameterGenerateInfo(
-        string name,
         string typeName,
+        string name,
         params AttributeGenerateInfo[] attributes
     )
     {
@@ -89,4 +89,9 @@ public enum ParameterGenerateType
     /// 只读引用参数
     /// </summary>
     In,
+
+    /// <summary>
+    /// 可变参数
+    /// </summary>
+    Params,
 }

@@ -56,6 +56,8 @@ public static class StringExtensions
         StringSplitOptions options = StringSplitOptions.None
     )
     {
+        if (str is null || str.Length == 0)
+            return Array.Empty<string>();
         return str.Split(_lineSeparator, options);
     }
 }

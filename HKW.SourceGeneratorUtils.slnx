@@ -5,4 +5,5 @@
   <Project Path="HKW.SourceGenerator/HKW.SourceGenerator.csproj" />
   <Project Path="HKW.SourceGeneratorDemo/HKW.SourceGeneratorDemo.csproj" />
   <Project Path="HKW.SourceGeneratorUtils/HKW.SourceGeneratorUtils.csproj" />
+  <Project Path="HKW.SourceGeneratorUtilsTest/HKW.SourceGeneratorUtilsTest.csproj" Id="801faa7b-fa7a-48c2-997a-08bdef220989" />
 </Solution>

@@ -84,8 +84,6 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
     /// <inheritdoc/>
     public void WriteTo(IndentedTextWriter writer)
     {
-        writer.WriteLine();
-
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
         if (AddDefaultAttributes)
@@ -180,7 +178,7 @@ public class PropertyMethodGenerateInfo
     /// <inheritdoc/>
     public void WriteTo(IndentedTextWriter writer)
     {
-        writer.Write(Accessibility.ToCode());
+        writer.WriteIf(Accessibility.ToCode(), " ");
         writer.Write(GenerateType.ToCode());
 
         if (Content == ";" || Content.StartsWith("=>"))

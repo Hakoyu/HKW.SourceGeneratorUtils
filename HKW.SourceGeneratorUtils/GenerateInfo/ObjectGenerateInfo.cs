@@ -79,8 +79,6 @@ public class ObjectGenerateInfo
     /// <param name="writer">写入器</param>
     public void WriteTo(IndentedTextWriter writer)
     {
-        writer.WriteLine();
-
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
         if (AddDefaultAttributes)

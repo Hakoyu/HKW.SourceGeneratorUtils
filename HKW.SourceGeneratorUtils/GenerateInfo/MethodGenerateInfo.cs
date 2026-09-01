@@ -101,8 +101,6 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     /// <inheritdoc/>
     public void WriteTo(IndentedTextWriter writer)
     {
-        writer.WriteLine();
-
         writer.WriteLineCollection(Comment.SplitLine());
         writer.WriteLineCollection(Attributes);
         if (AddDefaultAttributes)
