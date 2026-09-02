@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtilsTest;
 
+#pragma warning disable S6562
 [TestClass]
 public sealed class FieldGenerateInfoTests
 {
@@ -20,7 +21,7 @@ public sealed class FieldGenerateInfoTests
             Default = "1",
         };
 
-        var result = TestHelper.FieldGenerate<int>(fieldInfo);
+        var result = TestHelper.FieldCompilation<int>(fieldInfo);
 
         Assert.AreEqual(1, result);
     }
@@ -32,9 +33,10 @@ public sealed class FieldGenerateInfoTests
         {
             Accessibility = Accessibility.Public,
         };
+
         var expected = new DateTime(2026, 9, 1);
 
-        var result = TestHelper.FieldGenerate<DateTime>(fieldInfo, expected);
+        var result = TestHelper.FieldCompilation<DateTime>(fieldInfo, expected);
 
         Assert.AreEqual(expected, result);
     }
@@ -48,7 +50,7 @@ public sealed class FieldGenerateInfoTests
             Default = "new System.Collections.Generic.List<int> { 1, 2, 3 }",
         };
 
-        var result = TestHelper.FieldGenerate<List<int>>(fieldInfo);
+        var result = TestHelper.FieldCompilation<List<int>>(fieldInfo);
 
         CollectionAssert.AreEqual(new[] { 1, 2, 3 }, result);
     }

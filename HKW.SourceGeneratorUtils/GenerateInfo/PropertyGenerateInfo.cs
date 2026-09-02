@@ -137,7 +137,7 @@ public class PropertySetMethodGenerateInfo : PropertyMethodGenerateInfo
 /// <summary>
 /// 属性方法生成信息
 /// <para>
-/// <see langword="null"/> 表示不生成，<c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体。
+/// <c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体
 /// </para>
 /// </summary>
 public class PropertyMethodGenerateInfo

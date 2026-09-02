@@ -20,7 +20,7 @@ public sealed class MethodGenerateInfoTests
             Accessibility = accessibility,
         };
 
-        var result = TestHelper.MethodGenerate<int>(methodInfo, []);
+        var result = TestHelper.MethodCompilation<int>(methodInfo, []);
 
         Assert.AreEqual(1, result);
     }
@@ -37,7 +37,7 @@ public sealed class MethodGenerateInfoTests
             Accessibility = Accessibility.Public,
         };
 
-        var result = TestHelper.MethodGenerate<DateTime>(methodInfo, []);
+        var result = TestHelper.MethodCompilation<DateTime>(methodInfo, []);
 
         Assert.AreEqual(new DateTime(2026, 9, 1), result);
     }
@@ -52,7 +52,7 @@ public sealed class MethodGenerateInfoTests
         };
         object?[] inputs = [1];
 
-        var result = TestHelper.MethodGenerate<object?>(methodInfo, inputs);
+        var result = TestHelper.MethodCompilation<object?>(methodInfo, inputs);
 
         Assert.IsNull(result);
         Assert.AreEqual(2, inputs[0]);
@@ -82,7 +82,7 @@ public sealed class MethodGenerateInfoTests
         };
         object?[] inputs = [new List<string> { "item" }, 1, null, new DateTime(2026, 1, 1)];
 
-        var result = TestHelper.MethodGenerate<string>(methodInfo, inputs);
+        var result = TestHelper.MethodCompilation<string>(methodInfo, inputs);
 
         Assert.AreEqual("item:2:2026-09-01", result);
         Assert.AreEqual(2, inputs[1]);
@@ -99,7 +99,7 @@ public sealed class MethodGenerateInfoTests
             Params = [new("int[]", "values") { GenerateType = ParameterGenerateType.Params }],
         };
 
-        var result = TestHelper.MethodGenerate<int>(methodInfo, [new[] { 1, 2, 3 }]);
+        var result = TestHelper.MethodCompilation<int>(methodInfo, [new[] { 1, 2, 3 }]);
 
         Assert.AreEqual(3, result);
     }

@@ -21,7 +21,7 @@ public sealed class PropertyGenerateInfoTests
             Default = "7",
         };
 
-        var result = TestHelper.PropertyGenerate<int>(propertyInfo);
+        var result = TestHelper.PropertyCompilation<int>(propertyInfo);
 
         Assert.AreEqual(7, result);
     }
@@ -42,7 +42,7 @@ public sealed class PropertyGenerateInfoTests
             },
         };
 
-        var result = TestHelper.PropertyGenerate<int>(propertyInfo, 42);
+        var result = TestHelper.PropertyCompilation<int>(propertyInfo, 42);
 
         Assert.AreEqual(42, result);
     }
@@ -61,7 +61,7 @@ public sealed class PropertyGenerateInfoTests
             Default = "new System.Collections.Generic.List<int> { 1, 2, 3 }",
         };
 
-        var result = TestHelper.PropertyGenerate<List<int>>(propertyInfo);
+        var result = TestHelper.PropertyCompilation<List<int>>(propertyInfo);
 
         CollectionAssert.AreEqual(new[] { 1, 2, 3 }, result);
     }
