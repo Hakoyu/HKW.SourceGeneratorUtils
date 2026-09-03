@@ -26,7 +26,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Pack
-        run: dotnet pack --configuration Release -o ./artifacts
+        run: dotnet pack --configuration Release HKW.SourceGeneratorUtils
 
       # 登录并获取临时 API Key
       - name: NuGet login (OIDC → temp API key)
@@ -39,4 +39,4 @@ jobs:
 
       # 推送到 NuGet.org
       - name: NuGet push
-        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+        run: dotnet nuget push "./HKW.SourceGeneratorUtils/bin/Release/*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
