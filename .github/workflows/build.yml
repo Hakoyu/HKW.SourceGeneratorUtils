@@ -1,0 +1,39 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - 'v*'   # 例如推送 v1.0.0 时触发
+
+permissions:
+  id-token: write   # 必须启用 OIDC token
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 'netstandard2.0'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Pack
+        run: dotnet pack --configuration Release -o ./artifacts
+
+      - name: Authenticate with NuGet
+        uses: NuGet/login@v1
+        with:
+          nuget-server: https://api.nuget.org/v3/index.json
+
+      - name: Push package
+        run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json
