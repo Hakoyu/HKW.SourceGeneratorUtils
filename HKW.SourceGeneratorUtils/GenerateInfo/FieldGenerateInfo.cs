@@ -14,21 +14,18 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="type">类型</param>
-    public FieldGenerateInfo(string name, ITypeSymbol type)
-    {
-        Name = name;
-        TypeName = type.GetName();
-    }
+    /// <param name="name">名称</param>
+    public FieldGenerateInfo(ITypeSymbol type, string name)
+        : this(type.ToString(), name) { }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="typeName">类型名称</param>
-    public FieldGenerateInfo(string name, string typeName)
+    /// <param name="name">名称</param>
+    public FieldGenerateInfo(string typeName, string name)
     {
-        Name = name;
         TypeName = typeName;
+        Name = name;
     }
 
     /// <inheritdoc/>

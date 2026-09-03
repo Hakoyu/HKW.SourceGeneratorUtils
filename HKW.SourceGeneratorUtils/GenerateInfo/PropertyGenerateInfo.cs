@@ -22,20 +22,20 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
         ITypeSymbol type,
         PropertyGetMethodGenerateInfo getMethod
     )
-        : this(name, type.GetName(), getMethod) { }
+        : this(type.GetName(), name, getMethod) { }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="typeName">类型名称</param>
+    /// <param name="name">名称</param>
     /// <param name="getMethod">Get方法</param>
     public PropertyGenerateInfo(
-        string name,
         string typeName,
+        string name,
         PropertyGetMethodGenerateInfo getMethod
     )
     {
-        Name = name;
         TypeName = typeName;
+        Name = name;
         GetMethod = getMethod;
     }
 
@@ -108,6 +108,10 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
         {
             writer.Write($" = {Default}");
             writer.WriteLine(";");
+        }
+        else
+        {
+            writer.WriteLine();
         }
     }
 }

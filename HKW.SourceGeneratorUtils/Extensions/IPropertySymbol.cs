@@ -35,7 +35,7 @@ public static class IPropertySymbolExtensions
     /// /// OUT:
     /// return $"{FirstName}_{LastName}";
     /// ]]></code></remarks>
-    public static string? GetGetMethodStr(this IPropertySymbol propertySymbol)
+    public static string? GetGetMethodContent(this IPropertySymbol propertySymbol)
     {
         if (propertySymbol.GetMethod is null)
             return null;
@@ -67,12 +67,12 @@ public static class IPropertySymbolExtensions
     /// <param name="propertySymbol">属性</param>
     /// <param name="getMethodStr">Get方法字符串</param>
     /// <returns>是否获取成功</returns>
-    public static bool TryGetGetMethodStr(
+    public static bool TryGetGetMethodContent(
         this IPropertySymbol propertySymbol,
         out string getMethodStr
     )
     {
-        getMethodStr = GetGetMethodStr(propertySymbol)!;
-        return getMethodStr is null;
+        getMethodStr = GetGetMethodContent(propertySymbol)!;
+        return getMethodStr is not null;
     }
 }

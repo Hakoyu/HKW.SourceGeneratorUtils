@@ -15,7 +15,7 @@ public sealed class MethodGenerateInfoTests
     [DataRow(Accessibility.Public)]
     public void DifferentAccessibility(Accessibility accessibility)
     {
-        var methodInfo = new MethodGenerateInfo("GetValue", "int", "return 1;")
+        var methodInfo = new MethodGenerateInfo("int", "GetValue", "return 1;")
         {
             Accessibility = accessibility,
         };
@@ -29,8 +29,8 @@ public sealed class MethodGenerateInfoTests
     public void ValueTypeReturnAndNoParameters()
     {
         var methodInfo = new MethodGenerateInfo(
-            "GetDate",
             "System.DateTime",
+            "GetDate",
             "return new System.DateTime(2026, 9, 1);"
         )
         {
@@ -45,7 +45,7 @@ public sealed class MethodGenerateInfoTests
     [TestMethod]
     public void VoidReturnAndRefParameter()
     {
-        var methodInfo = new MethodGenerateInfo("Increase", "void", "value += 1;")
+        var methodInfo = new MethodGenerateInfo("void", "Increase", "value += 1;")
         {
             Accessibility = Accessibility.Internal,
             Params = [new("int", "value") { GenerateType = ParameterGenerateType.Ref }],
@@ -62,8 +62,8 @@ public sealed class MethodGenerateInfoTests
     public void ClassStructAndReferenceParameters()
     {
         var methodInfo = new MethodGenerateInfo(
-            "Format",
             "string",
+            "Format",
             """
             number += items.Count;
             created = new System.DateTime(timestamp.Year, 9, 1);
@@ -93,7 +93,7 @@ public sealed class MethodGenerateInfoTests
     [TestMethod]
     public void ParamsParameter()
     {
-        var methodInfo = new MethodGenerateInfo("GetLength", "int", "return values.Length;")
+        var methodInfo = new MethodGenerateInfo("int", "GetLength", "return values.Length;")
         {
             Accessibility = Accessibility.Public,
             Params = [new("int[]", "values") { GenerateType = ParameterGenerateType.Params }],

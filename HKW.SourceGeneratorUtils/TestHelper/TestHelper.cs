@@ -255,8 +255,26 @@ public static class TestHelper
     /// <returns>类型</returns>
     public static Type? GetType(string typeName)
     {
-        return NameByType.FirstOrDefault(pair => pair.Value == typeName).Key
-            ?? Type.GetType(typeName);
+        return typeName switch
+        {
+            "void" => typeof(void),
+            "bool" => typeof(bool),
+            "byte" => typeof(byte),
+            "sbyte" => typeof(sbyte),
+            "short" => typeof(short),
+            "ushort" => typeof(ushort),
+            "int" => typeof(int),
+            "uint" => typeof(uint),
+            "long" => typeof(long),
+            "ulong" => typeof(ulong),
+            "float" => typeof(float),
+            "double" => typeof(double),
+            "decimal" => typeof(decimal),
+            "char" => typeof(char),
+            "string" => typeof(string),
+            "object" => typeof(object),
+            _ => Type.GetType(typeName),
+        };
     }
 
     /// <summary>

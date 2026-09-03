@@ -15,39 +15,39 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="type">类型</param>
+    /// <param name="name">名称</param>
     /// <param name="content">内容</param>
-    public MethodGenerateInfo(string name, ITypeSymbol type, string content)
-        : this(name, type.GetName(), content) { }
+    public MethodGenerateInfo(ITypeSymbol type, string name, string content)
+        : this(type.GetName(), name, content) { }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="typeName">类型</param>
+    /// <param name="name">名称</param>
     /// <param name="content">内容</param>
-    public MethodGenerateInfo(string name, string typeName, string content)
+    public MethodGenerateInfo(string typeName, string name, string content)
     {
-        Name = name;
         TypeName = typeName;
+        Name = name;
         if (string.IsNullOrWhiteSpace(content) is false)
             Contents.Add(content);
     }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="type">类型</param>
+    /// <param name="name">名称</param>
     /// <param name="contents">内容</param>
-    public MethodGenerateInfo(string name, ITypeSymbol type, IEnumerable<string> contents)
-        : this(name, type.GetName(), contents) { }
+    public MethodGenerateInfo(ITypeSymbol type, string name, IEnumerable<string> contents)
+        : this(type.GetName(), name, contents) { }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="typeName">类型</param>
+    /// <param name="name">名称</param>
     /// <param name="contents">内容</param>
-    public MethodGenerateInfo(string name, string typeName, IEnumerable<string> contents)
+    public MethodGenerateInfo(string typeName, string name, IEnumerable<string> contents)
     {
-        Name = name;
         TypeName = typeName;
+        Name = name;
         Contents.AddRange(contents);
     }
 
@@ -115,7 +115,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
             writer.Write('(');
             writer.WriteCollection(Params, ",");
             writer.Write(')');
-            writer.Write(';');
+            writer.WriteLine(';');
         }
         else
         {

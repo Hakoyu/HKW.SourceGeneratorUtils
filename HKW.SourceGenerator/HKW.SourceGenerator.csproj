@@ -12,6 +12,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageDescription>A SourceGenerator Utils.</PackageDescription>
+    <PackageTags>SourceGenerator</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

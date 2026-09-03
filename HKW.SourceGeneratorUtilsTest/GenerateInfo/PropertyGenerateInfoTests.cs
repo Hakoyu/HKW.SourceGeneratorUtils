@@ -10,14 +10,10 @@ public sealed class PropertyGenerateInfoTests
     [TestMethod]
     public void AutoPropertyWithDefaultValue()
     {
-        var propertyInfo = new PropertyGenerateInfo(
-            "Count",
-            "int",
-            new PropertyGetMethodGenerateInfo(";")
-        )
+        var propertyInfo = new PropertyGenerateInfo("int", "Count", new(";"))
         {
             Accessibility = Accessibility.Public,
-            SetMethod = new PropertySetMethodGenerateInfo(";"),
+            SetMethod = new(";"),
             Default = "7",
         };
 
@@ -29,17 +25,10 @@ public sealed class PropertyGenerateInfoTests
     [TestMethod]
     public void PropertyWithPrivateSetter()
     {
-        var propertyInfo = new PropertyGenerateInfo(
-            "Count",
-            "int",
-            new PropertyGetMethodGenerateInfo(";")
-        )
+        var propertyInfo = new PropertyGenerateInfo("int", "Count", new(";"))
         {
             Accessibility = Accessibility.Public,
-            SetMethod = new PropertySetMethodGenerateInfo(";")
-            {
-                Accessibility = Accessibility.Private,
-            },
+            SetMethod = new(";") { Accessibility = Accessibility.Private },
         };
 
         var result = TestHelper.PropertyCompilation<int>(propertyInfo, 42);
@@ -51,13 +40,13 @@ public sealed class PropertyGenerateInfoTests
     public void ReferenceTypeProperty()
     {
         var propertyInfo = new PropertyGenerateInfo(
-            "Values",
             "System.Collections.Generic.List<int>",
-            new PropertyGetMethodGenerateInfo(";")
+            "Values",
+            new(";")
         )
         {
             Accessibility = Accessibility.Internal,
-            SetMethod = new PropertySetMethodGenerateInfo(";"),
+            SetMethod = new(";"),
             Default = "new System.Collections.Generic.List<int> { 1, 2, 3 }",
         };
 

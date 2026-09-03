@@ -15,7 +15,7 @@ public sealed class FieldGenerateInfoTests
     [DataRow(Accessibility.Public)]
     public void DifferentAccessibility(Accessibility accessibility)
     {
-        var fieldInfo = new FieldGenerateInfo("Value", "int")
+        var fieldInfo = new FieldGenerateInfo("int", "Value")
         {
             Accessibility = accessibility,
             Default = "1",
@@ -29,7 +29,7 @@ public sealed class FieldGenerateInfoTests
     [TestMethod]
     public void ValueTypeFieldCanBeAssigned()
     {
-        var fieldInfo = new FieldGenerateInfo("Created", "System.DateTime")
+        var fieldInfo = new FieldGenerateInfo("System.DateTime", "Created")
         {
             Accessibility = Accessibility.Public,
         };
@@ -44,7 +44,7 @@ public sealed class FieldGenerateInfoTests
     [TestMethod]
     public void ReferenceTypeFieldWithDefaultValue()
     {
-        var fieldInfo = new FieldGenerateInfo("Values", "System.Collections.Generic.List<int>")
+        var fieldInfo = new FieldGenerateInfo("System.Collections.Generic.List<int>", "Values")
         {
             Accessibility = Accessibility.Internal,
             Default = "new System.Collections.Generic.List<int> { 1, 2, 3 }",

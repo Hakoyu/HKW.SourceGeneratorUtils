@@ -66,10 +66,10 @@ internal partial class Generator : IIncrementalGenerator
             var infos = new List<MethodGenerateInfo>();
             foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
             {
-                var method = property.GetGetMethodStr();
+                var method = property.GetGetMethodContent();
                 if (method is not null)
                 {
-                    var info = new MethodGenerateInfo($"{property.Name}Func", property.Type, method)
+                    var info = new MethodGenerateInfo(property.Type, $"{property.Name}Func", method)
                     {
                         Accessibility = Accessibility.Public,
                         Comment = """

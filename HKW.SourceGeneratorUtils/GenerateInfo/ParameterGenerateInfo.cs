@@ -17,8 +17,8 @@ public class ParameterGenerateInfo
         params AttributeGenerateInfo[] attributes
     )
     {
-        Name = name;
         TypeName = typeName;
+        Name = name;
         Attributes = new(attributes);
     }
 
