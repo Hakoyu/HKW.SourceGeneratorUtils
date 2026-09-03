@@ -19,14 +19,14 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore ./src/MyProject.csproj
+      - name: Restore
+        run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore -c Release ./src/MyProject.csproj
+        run: dotnet build --configuration Release
 
       - name: Pack
-        run: dotnet pack -c Release ./src/MyProject.csproj -o ./artifacts
+        run: dotnet pack --configuration Release -o ./artifacts
 
       # 登录并获取临时 API Key
       - name: NuGet login (OIDC → temp API key)
