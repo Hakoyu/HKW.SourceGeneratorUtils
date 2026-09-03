@@ -34,7 +34,12 @@ jobs:
         id: login
         with:
           user: Hakoyu   # NuGet.org 用户名
+          token-service-url: https://www.nuget.org/api/v2/token
+          audience: https://www.nuget.org
 
       # 推送到 NuGet.org
       - name: NuGet push
-        run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+        run: dotnet nuget push "./artifacts/*.nupkg" \
+             --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
+             --source "https://api.nuget.org/v3/index.json" \
+             --skip-duplicate
