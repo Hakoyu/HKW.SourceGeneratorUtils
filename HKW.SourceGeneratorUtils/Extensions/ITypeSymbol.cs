@@ -74,13 +74,20 @@ public static class ITypeSymbolExtensions
     /// 获取名称
     /// </summary>
     /// <param name="typeSymbol">符号类型</param>
-    /// <param name="format">格式化</param>
     /// <returns>名称</returns>
-    public static string GetName(this ITypeSymbol typeSymbol, SymbolDisplayFormat? format = null)
+    public static string GetName(this ITypeSymbol typeSymbol)
     {
-        return format is null
-            ? typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-            : typeSymbol.ToDisplayString(format);
+        return typeSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+    }
+
+    /// <summary>
+    /// 获取全名称
+    /// </summary>
+    /// <param name="typeSymbol">符号类型</param>
+    /// <returns>名称</returns>
+    public static string GetFullName(this ITypeSymbol typeSymbol)
+    {
+        return typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
     }
 
     /// <summary>
