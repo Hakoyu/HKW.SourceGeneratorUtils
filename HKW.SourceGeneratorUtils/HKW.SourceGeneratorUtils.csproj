@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Version>0.1.1</Version>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <Version>0.1.0</Version>
     <Company>HKW</Company>
     <Authors>HKW</Authors>
     <PackageDescription>SourceGenerator</PackageDescription>
