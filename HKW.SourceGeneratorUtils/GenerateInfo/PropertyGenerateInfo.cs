@@ -118,6 +118,9 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
 
 /// <summary>
 /// 属性Get方法生成信息
+/// <para>
+/// <c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体
+/// </para>
 /// </summary>
 public class PropertyGetMethodGenerateInfo : PropertyMethodGenerateInfo
 {
@@ -129,6 +132,9 @@ public class PropertyGetMethodGenerateInfo : PropertyMethodGenerateInfo
 
 /// <summary>
 /// 属性Set方法生成信息
+/// <para>
+/// <c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体
+/// </para>
 /// </summary>
 public class PropertySetMethodGenerateInfo : PropertyMethodGenerateInfo
 {
