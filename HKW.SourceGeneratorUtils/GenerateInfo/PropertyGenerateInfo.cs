@@ -58,6 +58,11 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
     public Accessibility Accessibility { get; set; }
 
     /// <summary>
+    /// 生成类型
+    /// </summary>
+    public PropertyGenerateType GenerateType { get; set; }
+
+    /// <summary>
     /// Get 方法
     /// </summary>
     public PropertyGetMethodGenerateInfo GetMethod { get; set; }
@@ -90,6 +95,7 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
             writer.WriteLineCollection(DefaultAttributes);
 
         writer.WriteIf(Accessibility.ToCode(), " ");
+        writer.WriteIf(GenerateType.ToCode(), " ");
         writer.Write(TypeName);
         writer.Write(' ');
         writer.Write(Name);
@@ -196,6 +202,22 @@ public class PropertyMethodGenerateInfo
         else
             writer.WriteLineCollection(Content.SplitLine());
     }
+}
+
+/// <summary>
+/// 属性生成类型
+/// </summary>
+public enum PropertyGenerateType
+{
+    /// <summary>
+    /// 普通
+    /// </summary>
+    None,
+
+    /// <summary>
+    /// 部分属性
+    /// </summary>
+    Partial,
 }
 
 /// <summary>

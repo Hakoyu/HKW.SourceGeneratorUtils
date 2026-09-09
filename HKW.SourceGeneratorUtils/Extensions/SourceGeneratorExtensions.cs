@@ -165,6 +165,20 @@ public static class SourceGeneratorExtensions
     /// </summary>
     /// <param name="generateType">生成类型</param>
     /// <returns>代码</returns>
+    public static string ToCode(this PropertyGenerateType generateType)
+    {
+        return generateType switch
+        {
+            PropertyGenerateType.Partial => "partial",
+            _ => "",
+        };
+    }
+
+    /// <summary>
+    /// 转换为代码
+    /// </summary>
+    /// <param name="generateType">生成类型</param>
+    /// <returns>代码</returns>
     public static string ToCode(this ObjectGenerateType generateType)
     {
         return generateType switch
