@@ -22,7 +22,7 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
         ITypeSymbol type,
         PropertyGetMethodGenerateInfo getMethod
     )
-        : this(type.GetName(), name, getMethod) { }
+        : this(type.GetFullName(), name, getMethod) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型名称</param>

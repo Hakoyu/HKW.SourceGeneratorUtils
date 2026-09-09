@@ -19,7 +19,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     /// <param name="name">名称</param>
     /// <param name="content">内容</param>
     public MethodGenerateInfo(ITypeSymbol type, string name, string content)
-        : this(type.GetName(), name, content) { }
+        : this(type.GetFullName(), name, content) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型</param>
@@ -38,7 +38,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     /// <param name="name">名称</param>
     /// <param name="contents">内容</param>
     public MethodGenerateInfo(ITypeSymbol type, string name, IEnumerable<string> contents)
-        : this(type.GetName(), name, contents) { }
+        : this(type.GetFullName(), name, contents) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型</param>

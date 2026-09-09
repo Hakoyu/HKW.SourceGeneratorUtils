@@ -28,7 +28,7 @@ public class AttributeGenerateInfo
     /// <param name="params">参数</param>
     public AttributeGenerateInfo(ITypeSymbol type, params ParameterGenerateInfo[] @params)
     {
-        TypeName = type.GetName();
+        TypeName = type.GetFullName();
         Params = new(@params);
     }
 

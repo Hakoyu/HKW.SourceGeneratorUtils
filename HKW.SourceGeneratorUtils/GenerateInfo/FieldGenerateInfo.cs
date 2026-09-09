@@ -17,7 +17,7 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     /// <param name="type">类型</param>
     /// <param name="name">名称</param>
     public FieldGenerateInfo(ITypeSymbol type, string name)
-        : this(type.ToString(), name) { }
+        : this(type.GetFullName(), name) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型名称</param>
