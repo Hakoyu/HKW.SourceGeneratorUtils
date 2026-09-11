@@ -104,11 +104,11 @@ public static class ITypeSymbolExtensions
     )
     {
         var currentType = typeSymbol;
-        var typeName = symbolDisplayFormat is null
-            ? currentType.ToString()
-            : currentType.ToDisplayString(symbolDisplayFormat);
         while (currentType != null)
         {
+            var typeName = symbolDisplayFormat is null
+                ? currentType.ToString()
+                : currentType.ToDisplayString(symbolDisplayFormat);
             if (typeName == baseTypeFullName)
                 return true;
             currentType = currentType.BaseType;
