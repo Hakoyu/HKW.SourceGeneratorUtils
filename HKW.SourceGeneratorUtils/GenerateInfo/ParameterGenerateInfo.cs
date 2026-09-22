@@ -8,8 +8,19 @@ namespace HKW.SourceGeneratorUtils;
 public class ParameterGenerateInfo
 {
     /// <inheritdoc/>
+    /// <param name="type">类型</param>
     /// <param name="name">名称</param>
+    /// <param name="attributes">特性</param>
+    public ParameterGenerateInfo(
+        ITypeSymbol type,
+        string name,
+        params AttributeGenerateInfo[] attributes
+    )
+        : this(type.GetFullName(), name, attributes) { }
+
+    /// <inheritdoc/>
     /// <param name="typeName">类型名称</param>
+    /// <param name="name">名称</param>
     /// <param name="attributes">特性</param>
     public ParameterGenerateInfo(
         string typeName,
@@ -74,6 +85,11 @@ public enum ParameterGenerateType
     /// 无修饰符
     /// </summary>
     None,
+
+    /// <summary>
+    /// 本地传递, 意为扩展方法
+    /// </summary>
+    This,
 
     /// <summary>
     /// 按引用传递

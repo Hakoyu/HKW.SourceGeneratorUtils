@@ -137,6 +137,7 @@ public static class SourceGeneratorExtensions
     {
         return generateType switch
         {
+            ParameterGenerateType.This => "this",
             ParameterGenerateType.Ref => "ref",
             ParameterGenerateType.Out => "out",
             ParameterGenerateType.In => "in",
