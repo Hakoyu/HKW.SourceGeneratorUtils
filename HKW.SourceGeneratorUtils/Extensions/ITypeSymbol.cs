@@ -22,18 +22,6 @@ public static class ITypeSymbolExtensions
     }
 
     /// <summary>
-    /// 获取任务返回值类型
-    /// </summary>
-    /// <param name="typeSymbol">符号类型</param>
-    /// <returns>返回值类型</returns>
-    public static ITypeSymbol GetTaskReturnType(this ISymbol typeSymbol)
-    {
-        if (typeSymbol is INamedTypeSymbol { TypeArguments.Length: 1 } namedTypeSymbol)
-            return namedTypeSymbol.TypeArguments[0];
-        return GeneratorHelper.TypeVoid;
-    }
-
-    /// <summary>
     /// 是空类型
     /// </summary>
     /// <param name="symbol">符号类型</param>
@@ -47,13 +35,13 @@ public static class ITypeSymbolExtensions
     /// 获取任务返回值
     /// </summary>
     /// <param name="symbol">符号</param>
-    /// <returns>如果类型是 <see cref="Task{T}"/> 则返回结果, 否则返回 <see langword="null"/></returns>
+    /// <returns>如果类型是 <see cref="Task{T}"/> 则返回任务返回值, 否则返回 <see langword="null"/></returns>
     public static INamedTypeSymbol? GetTaskResult(this ITypeSymbol symbol)
     {
         var currentType = symbol;
         while (currentType != null)
         {
-            if (currentType.OriginalDefinition?.ToString() == GeneratorHelper.TaskResultFullName)
+            if (currentType.OriginalDefinition?.GetFullName() == GeneratorHelper.TaskResultFullName)
                 return ((INamedTypeSymbol)currentType).TypeArguments[0] as INamedTypeSymbol;
             currentType = currentType.BaseType;
         }
@@ -95,20 +83,16 @@ public static class ITypeSymbolExtensions
     /// </summary>
     /// <param name="typeSymbol">符号类型</param>
     /// <param name="baseTypeFullName">基类全名</param>
-    /// <param name="symbolDisplayFormat">显示名称格式</param>
-    /// <returns>当类型继承基类时为 <see langword="true"/> 未继承为 <see langword="false"/></returns>
-    public static bool InheritedFrom(
-        this ITypeSymbol typeSymbol,
-        string baseTypeFullName,
-        SymbolDisplayFormat? symbolDisplayFormat = null
-    )
+    /// <returns>是否继承自</returns>
+    public static bool InheritedFrom(this ITypeSymbol typeSymbol, string baseTypeFullName)
     {
         var currentType = typeSymbol;
         while (currentType != null)
         {
-            var typeName = symbolDisplayFormat is null
-                ? currentType.ToString()
-                : currentType.ToDisplayString(symbolDisplayFormat);
+            var typeName = currentType.GetFullName();
+            if (typeName == baseTypeFullName)
+                return true;
+            typeName = currentType.OriginalDefinition.GetFullName();
             if (typeName == baseTypeFullName)
                 return true;
             currentType = currentType.BaseType;

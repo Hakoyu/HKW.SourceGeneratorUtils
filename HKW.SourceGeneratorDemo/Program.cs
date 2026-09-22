@@ -15,16 +15,19 @@ internal class Program
 [SourceGeneratorTest]
 partial class PTest
 {
-    public List<int> GetList
-    {
-        get
-        {
-            var list = new List<int>();
-            for (int i = 0; i < 10; i++)
-                list.Add(i);
-            return list;
-        }
-    }
+    Task Task1 { get; } = Task.FromResult(0);
+    Task<int> Task2 { get; } = Task.FromResult(0);
+    Task<string> Task3 { get; } = Task.FromResult("");
+    //public List<int> GetList
+    //{
+    //    get
+    //    {
+    //        var list = new List<int>();
+    //        for (int i = 0; i < 10; i++)
+    //            list.Add(i);
+    //        return list;
+    //    }
+    //}
     //private readonly string _fullName = "";
     //public string FullName => _fullName;
     //public string FullName1 => $"{FirstName}_{LastName}";

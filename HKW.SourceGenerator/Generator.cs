@@ -43,57 +43,63 @@ internal partial class Generator : IIncrementalGenerator
         {
             var classSymbol = (INamedTypeSymbol)
                 ModelExtensions.GetDeclaredSymbol(syntaxTreeInfo.SemanticModel, declaredClass);
-            if (
-                classSymbol
-                    .GetAttributes()
-                    .FirstOrDefault(x =>
-                        x.AttributeClass.ToString() == typeof(SourceGeneratorTestAttribute).FullName
-                    )
-                is not AttributeData attributeData
-            )
-                continue;
-            var stringStream = new StringWriter();
-            var _writer = new IndentedTextWriter(stringStream);
-            _writer.Write(
-                $$"""
-                using HKW.SourceGenerator;
-                namespace HKW.SourceGeneratorDemo;
-                partial class {{classSymbol.Name}}
-                {
-
-                """
-            );
-            var infos = new List<MethodGenerateInfo>();
             foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
             {
-                var method = property.GetGetMethodContent();
-                if (method is not null)
-                {
-                    var info = new MethodGenerateInfo(property.Type, $"{property.Name}Func", method)
-                    {
-                        Accessibility = Accessibility.Public,
-                        Comment = """
-                            /// aaaa
-                            /// bbb
-                            /// ccc
-                            """,
-                    };
-                    infos.Add(info);
-                }
+                var result = property.Type.GetTaskResult();
+                //if (property.Type.InheritedFrom(GeneratorHelper.TaskResultFullName))
+                //    Debug.WriteLine(property.Type.GetFullName());
             }
-            _writer.Indent++;
-            foreach (var data in infos)
-            {
-                data.WriteTo(_writer);
-            }
-            _writer.Indent--;
-            _writer.WriteLine("}");
-            GeneratorHelper.ProductionContext.AddSource(
-                $"TestSourceGenerator_{classSymbol.Name}.g.cs",
-                stringStream.ToString()
-            );
-            var dic = new AttributeParamDictionary(attributeData);
-            Debug.WriteLine(dic);
+            //if (
+            //    classSymbol
+            //        .GetAttributes()
+            //        .FirstOrDefault(x =>
+            //            x.AttributeClass.ToString() == typeof(SourceGeneratorTestAttribute).FullName
+            //        )
+            //    is not AttributeData attributeData
+            //)
+            //    continue;
+            //var stringStream = new StringWriter();
+            //var _writer = new IndentedTextWriter(stringStream);
+            //_writer.Write(
+            //    $$"""
+            //    using HKW.SourceGenerator;
+            //    namespace HKW.SourceGeneratorDemo;
+            //    partial class {{classSymbol.Name}}
+            //    {
+
+            //    """
+            //);
+            //var infos = new List<MethodGenerateInfo>();
+            //foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
+            //{
+            //    var method = property.GetGetMethodContent();
+            //    if (method is not null)
+            //    {
+            //        var info = new MethodGenerateInfo(property.Type, $"{property.Name}Func", method)
+            //        {
+            //            Accessibility = Accessibility.Public,
+            //            Comment = """
+            //                /// aaaa
+            //                /// bbb
+            //                /// ccc
+            //                """,
+            //        };
+            //        infos.Add(info);
+            //    }
+            //}
+            //_writer.Indent++;
+            //foreach (var data in infos)
+            //{
+            //    data.WriteTo(_writer);
+            //}
+            //_writer.Indent--;
+            //_writer.WriteLine("}");
+            //GeneratorHelper.ProductionContext.AddSource(
+            //    $"TestSourceGenerator_{classSymbol.Name}.g.cs",
+            //    stringStream.ToString()
+            //);
+            //var dic = new AttributeParamDictionary(attributeData);
+            //Debug.WriteLine(dic);
         }
     }
 

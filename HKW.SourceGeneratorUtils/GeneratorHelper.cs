@@ -27,9 +27,9 @@ public static class GeneratorHelper
     {
         ProductionContext = productionContext;
         Compilation = compilation;
-
+        var assemblyName = System.Reflection.Assembly.GetCallingAssembly().GetName();
         GeneratedCodeAttribute =
-            $"[global::System.CodeDom.Compiler.GeneratedCode(\"{System.Reflection.Assembly.GetCallingAssembly().GetName().Name}\",\"{System.Reflection.Assembly.GetCallingAssembly().GetName().Version}\")]";
+            $"[global::System.CodeDom.Compiler.GeneratedCode(\"{assemblyName.Name}\",\"{assemblyName.Version}\")]";
         var generatedCodeAttribute = new AttributeGenerateInfo(GeneratedCodeAttribute);
         ObjectGenerateInfo.DefaultAttributes = [generatedCodeAttribute];
         MethodGenerateInfo.DefaultAttributes = [generatedCodeAttribute];
@@ -61,7 +61,7 @@ public static class GeneratorHelper
     /// <summary>
     /// 异步结果类型全名
     /// </summary>
-    public const string TaskResultFullName = "global::System.Threading.Tasks.Task<int>";
+    public const string TaskResultFullName = "global::System.Threading.Tasks.Task<TResult>";
 
     /// <summary>
     /// 生成代码特性
