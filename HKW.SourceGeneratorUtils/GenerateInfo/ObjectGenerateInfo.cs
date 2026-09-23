@@ -121,16 +121,10 @@ public class ConstructorGenerateInfo
 {
     /// <inheritdoc/>
     /// <param name="name">名称</param>
-    /// <param name="content">内容</param>
     /// <param name="params">参数</param>
-    public ConstructorGenerateInfo(
-        string name,
-        string content,
-        params ParameterGenerateInfo[] @params
-    )
+    public ConstructorGenerateInfo(string name, params ParameterGenerateInfo[] @params)
     {
         Name = name;
-        Content = content;
         Params = new(@params);
     }
 
@@ -157,7 +151,7 @@ public class ConstructorGenerateInfo
     public string Initializer { get; set; } = string.Empty;
 
     /// <inheritdoc/>
-    public string Content { get; set; }
+    public List<string> Contents { get; set; } = [];
 
     /// <inheritdoc/>
     public override string ToString()
@@ -193,7 +187,7 @@ public class ConstructorGenerateInfo
 
         writer.WriteLine("{");
         writer.Indent++;
-        writer.WriteLine(Content);
+        writer.WriteLineCollection(Contents);
         writer.Indent--;
         writer.WriteLine("}");
     }

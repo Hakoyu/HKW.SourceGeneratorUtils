@@ -11,24 +11,14 @@ namespace HKW.SourceGeneratorUtils;
 public static class ITypeSymbolExtensions
 {
     /// <summary>
-    /// 符号比较
+    /// 实现接口
     /// </summary>
     /// <param name="symbol">符号</param>
-    /// <param name="otherSymbol">另一个符号</param>
-    /// <returns>是否相等</returns>
-    public static bool SymbolEquals(this ISymbol symbol, ISymbol otherSymbol)
+    /// <param name="interfaceFullName">接口全名</param>
+    /// <returns>是否实现</returns>
+    public static bool ImplementInterface(this ITypeSymbol symbol, string interfaceFullName)
     {
-        return SymbolEqualityComparer.Default.Equals(symbol, otherSymbol);
-    }
-
-    /// <summary>
-    /// 是空类型
-    /// </summary>
-    /// <param name="symbol">符号类型</param>
-    /// <returns>是否空类型</returns>
-    public static bool IsVoid(this ISymbol symbol)
-    {
-        return SymbolEqualityComparer.Default.Equals(symbol, GeneratorHelper.TypeVoid);
+        return symbol.Interfaces.All(i => i.GetFullName() == interfaceFullName);
     }
 
     /// <summary>

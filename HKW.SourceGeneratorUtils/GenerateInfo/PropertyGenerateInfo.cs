@@ -14,12 +14,12 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
     public static AttributeGenerateInfo[]? DefaultAttributes { get; set; }
 
     /// <inheritdoc/>
-    /// <param name="name">名称</param>
     /// <param name="type">类型</param>
+    /// <param name="name">名称</param>
     /// <param name="getMethod">Get方法</param>
     public PropertyGenerateInfo(
-        string name,
         ITypeSymbol type,
+        string name,
         PropertyGetMethodGenerateInfo getMethod
     )
         : this(type.GetFullName(), name, getMethod) { }
@@ -125,35 +125,35 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
 /// <summary>
 /// 属性Get方法生成信息
 /// <para>
-/// <c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体
+/// <c>;</c> 表示自动访问器，<c>=>...;</c> 和 <c>{...}</c> 表示访问器主体
 /// </para>
 /// </summary>
 public class PropertyGetMethodGenerateInfo : PropertyMethodGenerateInfo
 {
     /// <inheritdoc/>
     /// <param name="content">内容</param>
-    public PropertyGetMethodGenerateInfo(string content)
+    public PropertyGetMethodGenerateInfo(string content = ";")
         : base(content, PropertyMethodGenerateType.Get) { }
 }
 
 /// <summary>
 /// 属性Set方法生成信息
 /// <para>
-/// <c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体
+/// <c>;</c> 表示自动访问器，<c>=>...;</c> 和 <c>{...}</c> 表示访问器主体
 /// </para>
 /// </summary>
 public class PropertySetMethodGenerateInfo : PropertyMethodGenerateInfo
 {
     /// <inheritdoc/>
     /// <param name="content">内容</param>
-    public PropertySetMethodGenerateInfo(string content)
+    public PropertySetMethodGenerateInfo(string content = ";")
         : base(content, PropertyMethodGenerateType.Set) { }
 }
 
 /// <summary>
 /// 属性方法生成信息
 /// <para>
-/// <c>;</c> 表示自动访问器，<c>=>...;</c>和<c>{...}</c>表示访问器主体
+/// <c>;</c> 表示自动访问器，<c>=>...;</c> 和 <c>{...}</c> 表示访问器主体
 /// </para>
 /// </summary>
 public class PropertyMethodGenerateInfo
@@ -166,6 +166,11 @@ public class PropertyMethodGenerateInfo
         Content = content;
         GenerateType = generateType;
     }
+
+    /// <summary>
+    /// 特性
+    /// </summary>
+    public List<AttributeGenerateInfo>? Attributes { get; set; }
 
     /// <summary>
     /// 可访问性
@@ -194,6 +199,7 @@ public class PropertyMethodGenerateInfo
     /// <inheritdoc/>
     public void WriteTo(IndentedTextWriter writer)
     {
+        writer.WriteLineCollection(Attributes);
         writer.WriteIf(Accessibility.ToCode(), " ");
         writer.Write(GenerateType.ToCode());
 

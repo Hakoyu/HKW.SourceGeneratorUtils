@@ -12,7 +12,7 @@ public static class StringExtensions
     /// <summary>
     /// 首字母小写
     /// </summary>
-    /// <param name="str"></param>
+    /// <param name="str">字符串</param>
     /// <returns>首字母为小写的字符串</returns>
     public static string FirstLetterToLower(this string str)
     {
