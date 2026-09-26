@@ -30,7 +30,7 @@ public static class IMethodSymbolExtensions
             );
         }
         var isTask = methodSymbol.ReturnType.InheritedFrom(GeneratorHelper.TaskTypeFullName);
-        return $"{(string.IsNullOrWhiteSpace(source) ? "" : source + ".")}{(isTask ? "await " : "")}{methodSymbol.Name}();";
+        return $"{(isTask ? "await " : "")}{(string.IsNullOrWhiteSpace(source) ? "" : source + ".")}{methodSymbol.Name}();";
     }
 
     /// <summary>
@@ -55,6 +55,6 @@ public static class IMethodSymbolExtensions
             );
         }
         var isTask = methodSymbol.ReturnType.InheritedFrom(GeneratorHelper.TaskTypeFullName);
-        return $"{(string.IsNullOrWhiteSpace(source) ? "" : source + ".")}{(isTask ? "await " : "")}{methodSymbol.Name}({string.Join(", ", parameters)});";
+        return $"{(isTask ? "await " : "")}{(string.IsNullOrWhiteSpace(source) ? "" : source + ".")}{methodSymbol.Name}({string.Join(", ", parameters)});";
     }
 }
