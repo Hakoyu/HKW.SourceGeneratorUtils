@@ -43,6 +43,11 @@ public interface IMemberGenerateInfo
     public Accessibility Accessibility { get; set; }
 
     /// <summary>
+    /// 是静态的
+    /// </summary>
+    public bool IsStatic { get; set; }
+
+    /// <summary>
     /// 写入至
     /// </summary>
     /// <param name="writer">写入器</param>

@@ -58,6 +58,21 @@ public sealed class PropertyGenerateInfoTests
     }
 
     [TestMethod]
+    public void IsStatic()
+    {
+        var propertyInfo = new PropertyGenerateInfo("int", "Value", new())
+        {
+            Accessibility = Accessibility.Internal,
+            Default = "6",
+            IsStatic = true,
+        };
+
+        var result = TestHelper.PropertyCompilation<int>(propertyInfo);
+
+        Assert.AreEqual(6, result);
+    }
+
+    [TestMethod]
     public void PartialProperty()
     {
         var propertyInfo = new PropertyGenerateInfo("int", "Count", new(";"))

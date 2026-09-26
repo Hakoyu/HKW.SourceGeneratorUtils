@@ -117,6 +117,18 @@ public static class IndentedTextWriterExtensions
     }
 
     /// <summary>
+    /// 写入
+    /// </summary>
+    /// <param name="writer">写入器</param>
+    /// <param name="canWrite">可以写入</param>
+    /// <param name="data">数据</param>
+    public static void WriteIf(this IndentedTextWriter writer, bool canWrite, string data)
+    {
+        if (canWrite)
+            writer.Write(data);
+    }
+
+    /// <summary>
     /// 检查
     /// </summary>
     /// <param name="checkMode">检查模式</param>

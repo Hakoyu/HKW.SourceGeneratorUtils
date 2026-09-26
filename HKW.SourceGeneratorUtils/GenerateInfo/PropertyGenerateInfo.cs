@@ -57,6 +57,9 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
 
+    /// <inheritdoc/>
+    public bool IsStatic { get; set; }
+
     /// <summary>
     /// 生成类型
     /// </summary>
@@ -95,6 +98,7 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
             writer.WriteLineCollection(DefaultAttributes);
 
         writer.WriteIf(Accessibility.ToCode(), " ");
+        writer.WriteIf(IsStatic, "static ");
         writer.WriteIf(GenerateType.ToCode(), " ");
         writer.Write(TypeName);
         writer.Write(' ');

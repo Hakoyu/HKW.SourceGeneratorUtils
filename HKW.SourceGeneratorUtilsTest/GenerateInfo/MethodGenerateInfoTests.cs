@@ -103,5 +103,19 @@ public sealed class MethodGenerateInfoTests
 
         Assert.AreEqual(3, result);
     }
+
+    [TestMethod]
+    public void IsStatic()
+    {
+        var methodInfo = new MethodGenerateInfo("int", "GetValue", "return 6;")
+        {
+            Accessibility = Accessibility.Internal,
+            IsStatic = true,
+        };
+
+        var result = TestHelper.MethodCompilation<int>(methodInfo);
+
+        Assert.AreEqual(6, result);
+    }
 }
 #pragma warning restore S6562

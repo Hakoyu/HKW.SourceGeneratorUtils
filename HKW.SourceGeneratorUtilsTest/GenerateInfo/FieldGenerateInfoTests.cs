@@ -54,5 +54,20 @@ public sealed class FieldGenerateInfoTests
 
         CollectionAssert.AreEqual(new[] { 1, 2, 3 }, result);
     }
+
+    [TestMethod]
+    public void IsStatic()
+    {
+        var fieldInfo = new FieldGenerateInfo("int", "Value")
+        {
+            Accessibility = Accessibility.Internal,
+            Default = "6",
+            IsStatic = true,
+        };
+
+        var result = TestHelper.FieldCompilation<int>(fieldInfo);
+
+        Assert.AreEqual(6, result);
+    }
 }
 #pragma warning restore S6562

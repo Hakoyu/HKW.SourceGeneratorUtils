@@ -69,6 +69,9 @@ public class MethodGenerateInfo : IMemberGenerateInfo
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
 
+    /// <inheritdoc/>
+    public bool IsStatic { get; set; }
+
     /// <summary>
     /// 参数
     /// </summary>
@@ -120,6 +123,7 @@ public class MethodGenerateInfo : IMemberGenerateInfo
         else
         {
             writer.WriteIf(Accessibility.ToCode(), " ");
+            writer.WriteIf(IsStatic, "static ");
             writer.WriteIf(GenerateType.ToCode(), " ");
             writer.Write(TypeName);
             writer.Write(' ');
@@ -151,11 +155,6 @@ public enum MethodGenerateType
     /// 无
     /// </summary>
     None,
-
-    /// <summary>
-    /// 静态
-    /// </summary>
-    Static,
 
     /// <summary>
     /// 部分

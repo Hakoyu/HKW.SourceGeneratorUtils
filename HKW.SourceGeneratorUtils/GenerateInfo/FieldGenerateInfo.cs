@@ -46,6 +46,9 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     /// <inheritdoc/>
     public Accessibility Accessibility { get; set; }
 
+    /// <inheritdoc/>
+    public bool IsStatic { get; set; }
+
     /// <summary>
     /// 默认值
     /// </summary>
@@ -69,6 +72,7 @@ public class FieldGenerateInfo : IMemberGenerateInfo
             writer.WriteLineCollection(DefaultAttributes);
 
         writer.WriteIf(Accessibility.ToCode(), " ");
+        writer.WriteIf(IsStatic, "static ");
         writer.Write(TypeName);
         writer.Write(' ');
         writer.Write(Name);

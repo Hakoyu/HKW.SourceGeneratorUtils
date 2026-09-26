@@ -16,9 +16,26 @@ public static class ITypeSymbolExtensions
     /// <param name="symbol">符号</param>
     /// <param name="interfaceFullName">接口全名</param>
     /// <returns>是否实现</returns>
-    public static bool ImplementInterface(this ITypeSymbol symbol, string interfaceFullName)
+    public static INamedTypeSymbol? GetInterface(this ITypeSymbol symbol, string interfaceFullName)
     {
-        return symbol.Interfaces.Any(i => i.GetFullName() == interfaceFullName);
+        return symbol.Interfaces.FirstOrDefault(i =>
+            i.GetFullName() == interfaceFullName
+            || i.OriginalDefinition.GetFullName() == interfaceFullName
+        );
+    }
+
+    /// <summary>
+    /// 实现接口
+    /// </summary>
+    /// <param name="symbol">符号</param>
+    /// <param name="interfaceFullName">接口全名</param>
+    /// <returns>是否实现</returns>
+    public static bool HasInterface(this ITypeSymbol symbol, string interfaceFullName)
+    {
+        return symbol.Interfaces.Any(i =>
+            i.GetFullName() == interfaceFullName
+            || i.OriginalDefinition.GetFullName() == interfaceFullName
+        );
     }
 
     /// <summary>

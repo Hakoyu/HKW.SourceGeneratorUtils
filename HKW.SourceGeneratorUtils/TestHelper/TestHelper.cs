@@ -19,6 +19,8 @@ public static class TestHelper
         // 验证方法的基本信息
         if (generateInfo.Name != methodInfo.Name)
             throw new GenerateInfoException("Method name does not match.");
+        if (generateInfo.IsStatic != methodInfo.IsStatic)
+            throw new GenerateInfoException("Method is not static.");
         if (TypeNameEquals(generateInfo.TypeName, methodInfo.ReturnType) is false)
             throw new GenerateInfoException("Method return type does not match.");
         if (AccessibilityEquals(generateInfo.Accessibility, methodInfo) is false)
@@ -70,6 +72,8 @@ public static class TestHelper
             throw new GenerateInfoException("Property does not contain a get accessor.");
         if (generateInfo.Name != propertyInfo.Name)
             throw new GenerateInfoException("Property name does not match.");
+        if (generateInfo.IsStatic != propertyInfo.GetMethod.IsStatic)
+            throw new GenerateInfoException("Property is not static.");
         if (TypeNameEquals(generateInfo.TypeName, propertyInfo.PropertyType) is false)
             throw new GenerateInfoException("Property type does not match.");
         if (AccessibilityEquals(generateInfo.Accessibility, getMethod) is false)
@@ -115,6 +119,8 @@ public static class TestHelper
         // 验证字段的基本信息
         if (generateInfo.Name != fieldInfo.Name)
             throw new GenerateInfoException("Field name does not match.");
+        if (generateInfo.IsStatic != fieldInfo.IsStatic)
+            throw new GenerateInfoException("Field is not static.");
         if (TypeNameEquals(generateInfo.TypeName, fieldInfo.FieldType) is false)
             throw new GenerateInfoException("Field type does not match.");
         if (AccessibilityEquals(generateInfo.Accessibility, fieldInfo) is false)
@@ -170,15 +176,12 @@ public static class TestHelper
     {
         return generateType switch
         {
-            MethodGenerateType.Static => methodInfo.IsStatic,
             MethodGenerateType.Abstract => methodInfo.IsAbstract,
             MethodGenerateType.Virtual => methodInfo.IsVirtual
                 && methodInfo.GetBaseDefinition().DeclaringType == methodInfo.DeclaringType,
             MethodGenerateType.Override => methodInfo.IsVirtual
                 && methodInfo.GetBaseDefinition().DeclaringType != methodInfo.DeclaringType,
-            MethodGenerateType.None => !methodInfo.IsStatic
-                && !methodInfo.IsAbstract
-                && !methodInfo.IsVirtual,
+            MethodGenerateType.None => !methodInfo.IsAbstract && !methodInfo.IsVirtual,
             _ => !methodInfo.IsStatic,
         };
     }
@@ -307,7 +310,7 @@ public static class TestHelper
     /// <param name="generateInfo">方法构建信息</param>
     /// <param name="inputs">参数</param>
     /// <returns>返回值</returns>
-    public static T MethodCompilation<T>(MethodGenerateInfo generateInfo, object?[] inputs)
+    public static T MethodCompilation<T>(MethodGenerateInfo generateInfo, params object?[] inputs)
     {
         var fullInfo = $$"""
             internal class Program

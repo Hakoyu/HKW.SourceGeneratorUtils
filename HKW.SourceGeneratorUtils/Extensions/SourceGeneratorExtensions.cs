@@ -139,7 +139,6 @@ public static class SourceGeneratorExtensions
     {
         return generateType switch
         {
-            MethodGenerateType.Static => "static",
             MethodGenerateType.Partial => "partial",
             MethodGenerateType.Override => "override",
             MethodGenerateType.Abstract => "abstract",
