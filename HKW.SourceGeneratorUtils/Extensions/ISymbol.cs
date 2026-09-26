@@ -41,7 +41,7 @@ public static class ISymbolExtensions
     {
         return symbol
             .GetAttributes()
-            .FirstOrDefault(x => x.AttributeClass!.ToString() == attributeName);
+            .FirstOrDefault(x => x.AttributeClass!.GetFullName() == attributeName);
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public static class ISymbolExtensions
     {
         attributeData = symbol
             .GetAttributes()
-            .FirstOrDefault(x => x.AttributeClass!.ToString() == attributeName)!;
+            .FirstOrDefault(x => x.AttributeClass!.GetFullName() == attributeName)!;
         return attributeData is not null;
     }
 }
