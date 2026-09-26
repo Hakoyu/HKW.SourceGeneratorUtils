@@ -7,6 +7,25 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace HKW.SourceGeneratorUtils;
 
 /// <summary>
+/// 特性信息
+/// </summary>
+public class AttributeInfo : AttributeParamDictionary
+{
+    /// <inheritdoc/>
+    /// <param name="attributeData">特性</param>
+    public AttributeInfo(AttributeData attributeData)
+        : base(attributeData)
+    {
+        Data = attributeData;
+    }
+
+    /// <summary>
+    /// 特性数据
+    /// </summary>
+    public AttributeData Data { get; }
+}
+
+/// <summary>
 /// 组件信息
 /// </summary>
 /// <param name="productionContext">生产环境</param>

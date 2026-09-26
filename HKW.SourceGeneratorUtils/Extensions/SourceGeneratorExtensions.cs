@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HKW.SourceGeneratorUtils;
 
@@ -11,6 +12,25 @@ namespace HKW.SourceGeneratorUtils;
 /// </summary>
 public static class SourceGeneratorExtensions
 {
+    /// <summary>
+    /// 获取常量字符串
+    /// </summary>
+    /// <param name="expression">表达式</param>
+    /// <param name="semanticModel">语义模型</param>
+    /// <returns>字符串</returns>
+    public static string? GetConstantString(
+        this ExpressionSyntax expression,
+        SemanticModel semanticModel
+    )
+    {
+        var constant = semanticModel.GetConstantValue(expression);
+
+        if (constant.HasValue is false)
+            return null;
+
+        return constant.Value as string;
+    }
+
     /// <summary>
     /// 从当前类中查找成员
     /// </summary>

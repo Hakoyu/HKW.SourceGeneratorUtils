@@ -18,7 +18,7 @@ public static class ITypeSymbolExtensions
     /// <returns>是否实现</returns>
     public static bool ImplementInterface(this ITypeSymbol symbol, string interfaceFullName)
     {
-        return symbol.Interfaces.All(i => i.GetFullName() == interfaceFullName);
+        return symbol.Interfaces.Any(i => i.GetFullName() == interfaceFullName);
     }
 
     /// <summary>

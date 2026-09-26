@@ -9,7 +9,6 @@
     <IsRoslynComponent>true</IsRoslynComponent>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageDescription>A SourceGenerator Utils.</PackageDescription>
