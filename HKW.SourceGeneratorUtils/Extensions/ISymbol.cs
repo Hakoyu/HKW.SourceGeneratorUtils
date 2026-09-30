@@ -22,44 +22,39 @@ public static class ISymbolExtensions
     }
 
     /// <summary>
-    /// 是空类型
-    /// </summary>
-    /// <param name="symbol">符号类型</param>
-    /// <returns>是否空类型</returns>
-    public static bool IsVoid(this ISymbol symbol)
-    {
-        return SymbolEqualityComparer.Default.Equals(symbol, GeneratorHelper.TypeVoid);
-    }
-
-    /// <summary>
     /// 获取第一个特性数据
     /// </summary>
     /// <param name="symbol">符号类型</param>
-    /// <param name="attributeName">特性名称</param>
+    /// <param name="attributeTypeFullName">特性名称</param>
     /// <returns>特性数据</returns>
-    public static AttributeData? GetFirstAttribute(this ISymbol symbol, string attributeName)
+    public static AttributeData? GetFirstAttribute(
+        this ISymbol symbol,
+        string attributeTypeFullName
+    )
     {
+        var isGlobal = attributeTypeFullName.IsGlobalName();
         return symbol
             .GetAttributes()
-            .FirstOrDefault(x => x.AttributeClass!.GetFullName() == attributeName);
+            .FirstOrDefault(x => x.AttributeClass!.GetFullName(isGlobal) == attributeTypeFullName);
     }
 
     /// <summary>
-    /// 尝试获取第一个特征数据
+    /// 尝试获取第一个特性数据
     /// </summary>
     /// <param name="symbol">符号类型</param>
-    /// <param name="attributeName">特征名称</param>
-    /// <param name="attributeData">特征数据</param>
+    /// <param name="attributeTypeFullName">特性名称</param>
+    /// <param name="attributeData">特性数据</param>
     /// <returns>是否获取成功</returns>
     public static bool TryGetFirstAttribute(
         this ISymbol symbol,
-        string attributeName,
+        string attributeTypeFullName,
         out AttributeData attributeData
     )
     {
+        var isGlobal = attributeTypeFullName.IsGlobalName();
         attributeData = symbol
             .GetAttributes()
-            .FirstOrDefault(x => x.AttributeClass!.GetFullName() == attributeName)!;
+            .FirstOrDefault(x => x.AttributeClass!.GetFullName(isGlobal) == attributeTypeFullName)!;
         return attributeData is not null;
     }
 }

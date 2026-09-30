@@ -10,6 +10,16 @@ namespace HKW.SourceGeneratorUtils;
 public static class StringExtensions
 {
     /// <summary>
+    /// 是全局名称
+    /// </summary>
+    /// <param name="typeFullName">类型名称</param>
+    /// <returns>是否为全局名称</returns>
+    public static bool IsGlobalName(this string typeFullName)
+    {
+        return typeFullName.StartsWith(GeneratorHelper.GlobalPrefix);
+    }
+
+    /// <summary>
     /// 首字母小写
     /// </summary>
     /// <param name="str">字符串</param>

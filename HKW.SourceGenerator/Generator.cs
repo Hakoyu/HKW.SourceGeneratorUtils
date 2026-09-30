@@ -16,24 +16,24 @@ internal partial class Generator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+        GeneratorHelper.Initialize();
         var compilation = context.CompilationProvider.Select(static (c, _) => c);
 
         context.RegisterSourceOutput(
             compilation,
             static (spc, compilation) =>
             {
-                GeneratorHelper.Initialize(spc, compilation);
                 foreach (var syntaxTree in compilation.SyntaxTrees)
                 {
-                    ParseSyntaxTree(syntaxTree);
+                    ParseSyntaxTree(compilation, syntaxTree);
                 }
             }
         );
     }
 
-    private static void ParseSyntaxTree(SyntaxTree syntaxTree)
+    private static void ParseSyntaxTree(Compilation compilation, SyntaxTree syntaxTree)
     {
-        var semanticModel = GeneratorHelper.Compilation.GetSemanticModel(syntaxTree);
+        var semanticModel = compilation.GetSemanticModel(syntaxTree);
         var syntaxTreeInfo = new SyntaxTreeInfo(syntaxTree, semanticModel);
         var declaredClasses = syntaxTree
             .GetRoot()

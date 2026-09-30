@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
 
@@ -11,47 +12,40 @@ namespace HKW.SourceGeneratorUtils;
 public static class GeneratorHelper
 {
     /// <summary>
-    /// Void类型
+    /// 全局前缀
     /// </summary>
-    public static ITypeSymbol TypeVoid { get; private set; } = null!;
+    public const string GlobalPrefix = "global::";
+
+    /// <summary>
+    /// 程序集
+    /// </summary>
+    public static Assembly Assembly { get; private set; } = null!;
+
+    /// <summary>
+    /// 程序集名称
+    /// </summary>
+    public static AssemblyName AssemblyName { get; private set; } = null!;
 
     /// <summary>
     /// 初始化
     /// </summary>
-    /// <param name="productionContext">生产环境</param>
-    /// <param name="compilation">编译</param>
-    public static void Initialize(
-        SourceProductionContext productionContext,
-        Compilation compilation
-    )
+    public static void Initialize()
     {
-        ProductionContext = productionContext;
-        Compilation = compilation;
-        var assemblyName = System.Reflection.Assembly.GetCallingAssembly().GetName();
-        GeneratedCodeAttribute =
-            $"[global::System.CodeDom.Compiler.GeneratedCode(\"{assemblyName.Name}\",\"{assemblyName.Version}\")]";
-        var generatedCodeAttribute = new AttributeGenerateInfo(GeneratedCodeAttribute);
-        ObjectGenerateInfo.DefaultAttributes = [generatedCodeAttribute];
-        MethodGenerateInfo.DefaultAttributes = [generatedCodeAttribute];
-        PropertyGenerateInfo.DefaultAttributes = [generatedCodeAttribute];
+        Assembly = System.Reflection.Assembly.GetCallingAssembly();
+        AssemblyName = Assembly.GetName();
+        GeneratedCodeAttributeName =
+            $"[global::System.CodeDom.Compiler.GeneratedCode(\"{AssemblyName.Name}\",\"{AssemblyName.Version}\")]";
+        GeneratedCodeAttribute = new(GeneratedCodeAttributeName);
+        DebuggerBrowsableNeverAttribute = new(DebuggerBrowsableNeverAttributeName);
+        ObjectGenerateInfo.DefaultAttributes = [GeneratedCodeAttribute];
+        MethodGenerateInfo.DefaultAttributes = [GeneratedCodeAttribute];
+        PropertyGenerateInfo.DefaultAttributes = [GeneratedCodeAttribute];
         FieldGenerateInfo.DefaultAttributes =
         [
-            generatedCodeAttribute,
-            new(DebuggerBrowsableNeverAttribute),
+            GeneratedCodeAttribute,
+            DebuggerBrowsableNeverAttribute,
         ];
-
-        TypeVoid = Compilation.GetSpecialType(SpecialType.System_Void);
     }
-
-    /// <summary>
-    /// 生产环境
-    /// </summary>
-    public static SourceProductionContext ProductionContext { get; private set; }
-
-    /// <summary>
-    /// 编译
-    /// </summary>
-    public static Compilation Compilation { get; private set; } = null!;
 
     /// <summary>
     /// 异步类型全名
@@ -64,15 +58,26 @@ public static class GeneratorHelper
     public const string TaskResultFullName = "global::System.Threading.Tasks.Task<TResult>";
 
     /// <summary>
-    /// 生成代码特性
+    /// 生成代码特性名称
     /// </summary>
-    public static string GeneratedCodeAttribute { get; private set; } = null!;
+    public static string GeneratedCodeAttributeName { get; private set; } = null!;
 
     /// <summary>
-    /// 从不在调试菜单显示标签
+    /// 生成代码特性
     /// </summary>
-    public const string DebuggerBrowsableNeverAttribute =
+    public static AttributeGenerateInfo GeneratedCodeAttribute { get; private set; } = null!;
+
+    /// <summary>
+    /// 从不在调试菜单显示标签特性名称
+    /// </summary>
+    public const string DebuggerBrowsableNeverAttributeName =
         "[global::System.Diagnostics.DebuggerBrowsable(global::System.Diagnostics.DebuggerBrowsableState.Never)]";
+
+    /// <summary>
+    /// 从不在调试菜单显示标签特性
+    /// </summary>
+    public static AttributeGenerateInfo DebuggerBrowsableNeverAttribute { get; private set; } =
+        null!;
 
     /// <summary>
     /// 对象名称

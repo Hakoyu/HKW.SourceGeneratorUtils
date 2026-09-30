@@ -17,7 +17,7 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     /// <param name="type">类型</param>
     /// <param name="name">名称</param>
     public FieldGenerateInfo(ITypeSymbol type, string name)
-        : this(type.GetFullName(), name) { }
+        : this(type.GetGlobalFullName(), name) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型名称</param>
@@ -50,6 +50,11 @@ public class FieldGenerateInfo : IMemberGenerateInfo
     public bool IsStatic { get; set; }
 
     /// <summary>
+    /// 是只读的
+    /// </summary>
+    public bool IsReadOnly { get; set; }
+
+    /// <summary>
     /// 默认值
     /// </summary>
     public string Default { get; set; } = string.Empty;
@@ -73,6 +78,7 @@ public class FieldGenerateInfo : IMemberGenerateInfo
 
         writer.WriteIf(Accessibility.ToCode(), " ");
         writer.WriteIf(IsStatic, "static ");
+        writer.WriteIf(IsReadOnly, "readonly ");
         writer.Write(TypeName);
         writer.Write(' ');
         writer.Write(Name);

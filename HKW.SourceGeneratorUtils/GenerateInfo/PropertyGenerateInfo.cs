@@ -22,7 +22,7 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
         string name,
         PropertyGetMethodGenerateInfo getMethod
     )
-        : this(type.GetFullName(), name, getMethod) { }
+        : this(type.GetGlobalFullName(), name, getMethod) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型名称</param>
@@ -59,6 +59,11 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
 
     /// <inheritdoc/>
     public bool IsStatic { get; set; }
+
+    /// <summary>
+    /// 是只读的
+    /// </summary>
+    public bool IsReadOnly { get; set; }
 
     /// <summary>
     /// 生成类型
@@ -99,6 +104,7 @@ public class PropertyGenerateInfo : IMemberGenerateInfo
 
         writer.WriteIf(Accessibility.ToCode(), " ");
         writer.WriteIf(IsStatic, "static ");
+        writer.WriteIf(IsReadOnly, "readonly ");
         writer.WriteIf(GenerateType.ToCode(), " ");
         writer.Write(TypeName);
         writer.Write(' ');

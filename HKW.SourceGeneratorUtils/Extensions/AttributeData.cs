@@ -15,8 +15,8 @@ public static class AttributeDataExtensions
     /// </summary>
     /// <param name="attributeData">特性数据</param>
     /// <returns>特性参数字典</returns>
-    public static AttributeParamDictionary GetParams(this AttributeData attributeData)
+    public static AttributeInfo? GetInfo(this AttributeData? attributeData)
     {
-        return new AttributeParamDictionary(attributeData);
+        return attributeData is null ? null : new AttributeInfo(attributeData);
     }
 }

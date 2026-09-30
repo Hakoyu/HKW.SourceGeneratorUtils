@@ -16,7 +16,7 @@ public class ParameterGenerateInfo
         string name,
         params AttributeGenerateInfo[] attributes
     )
-        : this(type.GetFullName(), name, attributes) { }
+        : this(type.GetGlobalFullName(), name, attributes) { }
 
     /// <inheritdoc/>
     /// <param name="typeName">类型名称</param>
