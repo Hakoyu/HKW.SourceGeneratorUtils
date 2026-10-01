@@ -78,7 +78,19 @@ public static class ITypeSymbolExtensions
     /// <returns>全名</returns>
     public static string GetUnderlineFullName(this ITypeSymbol typeSymbol)
     {
-        return $"{typeSymbol.ContainingNamespace.ToString().Replace('.', '_')}_{typeSymbol.Name}";
+        return $"{typeSymbol.ContainingNamespace.ToString().ReplaceDotToUnderline()}_{typeSymbol.Name}";
+    }
+
+    /// <summary>
+    /// 是名称
+    /// </summary>
+    /// <param name="typeSymbol">符号类型</param>
+    /// <param name="typeFullName">类型全名</param>
+    /// <returns>名称</returns>
+    public static bool IsName(this ITypeSymbol typeSymbol, string typeFullName)
+    {
+        var isGlobal = typeFullName.IsGlobalName();
+        return typeSymbol.Name == typeFullName || typeSymbol.GetFullName(isGlobal) == typeFullName;
     }
 
     /// <summary>

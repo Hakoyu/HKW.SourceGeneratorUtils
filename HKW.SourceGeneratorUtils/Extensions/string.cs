@@ -53,6 +53,16 @@ public static class StringExtensions
         return new string(chars);
     }
 
+    /// <summary>
+    /// 将符号 <c>.</c> 替换为 <c>_</c>
+    /// </summary>
+    /// <param name="str">字符串</param>
+    /// <returns>替换完成的字符串</returns>
+    public static string ReplaceDotToUnderline(this string str)
+    {
+        return str.Replace('.', '_');
+    }
+
     private static string[] _lineSeparator = ["\r\n", "\r", "\n"];
 
     /// <summary>

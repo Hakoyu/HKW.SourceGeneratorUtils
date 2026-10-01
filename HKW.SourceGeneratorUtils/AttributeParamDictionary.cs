@@ -1,8 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 
 namespace HKW.SourceGeneratorUtils;
+
+/// <summary>
+/// 特性信息
+/// </summary>
+public class AttributeInfo : AttributeParamDictionary
+{
+    /// <inheritdoc/>
+    /// <param name="attributeData">特性</param>
+    public AttributeInfo(AttributeData attributeData)
+        : base(attributeData)
+    {
+        Data = attributeData;
+    }
+
+    /// <summary>
+    /// 特性数据
+    /// </summary>
+    public AttributeData Data { get; }
+}
 
 /// <summary>
 /// 特性参数字典(ParamName, ParamValue)
@@ -52,8 +72,6 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
     /// <returns>是否存在</returns>
     public TValue GetParam<TValue>(string paramName)
     {
-        if (typeof(TValue).IsArray)
-            throw new NotSupportedException();
         var r = _dictionary.TryGetValue(paramName, out var value);
         return r ? (TValue)value.Value! : default!;
     }
@@ -67,24 +85,20 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
     /// <returns>是否存在</returns>
     public TValue GetParamOrDefault<TValue>(string paramName, TValue defaultValue)
     {
-        if (typeof(TValue).IsArray)
-            throw new NotSupportedException();
         var r = _dictionary.TryGetValue(paramName, out var value);
         return r ? (TValue)value.Value! : defaultValue;
     }
 
     /// <summary>
-    /// 获取参数值
+    /// 获取参数数值
     /// </summary>
     /// <typeparam name="TValue">类型</typeparam>
     /// <param name="paramName">参数名称</param>
-    /// <returns>是否存在</returns>
-    public IEnumerable<TValue> GetParams<TValue>(string paramName)
+    /// <returns>数组或Null</returns>
+    public TValue[]? GetParams<TValue>(string paramName)
     {
-        var r = _dictionary.TryGetValue(paramName, out var value);
-        if (value.Values is null)
-            throw new NotSupportedException($"Param {paramName} is not array");
-        return r ? value.Values.Cast<TValue>() : default!;
+        _dictionary.TryGetValue(paramName, out var value);
+        return value.Values is null ? null : value.Values.Cast<TValue>().ToArray<TValue>();
     }
 
     /// <summary>
@@ -96,8 +110,6 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
     /// <returns>是否存在</returns>
     public bool TryGetParam<TValue>(string paramName, out TValue paramValue)
     {
-        if (typeof(TValue).IsArray)
-            throw new NotSupportedException();
         var r = _dictionary.TryGetValue(paramName, out var value);
         paramValue = r ? (TValue)value.Value! : default!;
         return r;
@@ -108,14 +120,12 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
     /// </summary>
     /// <typeparam name="TValue">类型</typeparam>
     /// <param name="paramName">参数名称</param>
-    /// <param name="parameterArray">参数数组</param>
+    /// <param name="paramArray">参数数组</param>
     /// <returns>是否存在</returns>
-    public bool TryGetParams<TValue>(string paramName, out IEnumerable<TValue> parameterArray)
+    public bool TryGetParams<TValue>(string paramName, out TValue[] paramArray)
     {
         var r = _dictionary.TryGetValue(paramName, out var value);
-        if (value.Values is null)
-            throw new NotSupportedException($"Param {paramName} is not array");
-        parameterArray = r ? value.Values.Cast<TValue>() : default!;
+        paramArray = r ? value.Values.Cast<TValue>().ToArray() : Array.Empty<TValue>();
         return r;
     }
 
