@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>0.1.13</Version>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.2.0</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Company>HKW</Company>
     <Authors>HKW</Authors>
@@ -32,10 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.3.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" PrivateAssets="all" />
     <PackageReference
       Include="Microsoft.CodeAnalysis.Analyzers"
-      Version="5.3.0"
+      Version="5.9.0"
       PrivateAssets="all"
     />
   </ItemGroup>
