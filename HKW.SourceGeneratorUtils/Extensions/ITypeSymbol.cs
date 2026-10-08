@@ -30,7 +30,7 @@ public static class ITypeSymbolExtensions
     public static INamedTypeSymbol? GetInterface(this ITypeSymbol symbol, string interfaceFullName)
     {
         var isGlobal = interfaceFullName.IsGlobalName();
-        return symbol.Interfaces.FirstOrDefault(i =>
+        return symbol.AllInterfaces.FirstOrDefault(i =>
             i.GetFullName(isGlobal) == interfaceFullName
             || i.OriginalDefinition.GetFullName(isGlobal) == interfaceFullName
         );
@@ -45,7 +45,7 @@ public static class ITypeSymbolExtensions
     public static bool HasInterface(this ITypeSymbol symbol, string interfaceFullName)
     {
         var isGlobal = interfaceFullName.IsGlobalName();
-        return symbol.Interfaces.Any(i =>
+        return symbol.AllInterfaces.Any(i =>
             i.GetFullName(isGlobal) == interfaceFullName
             || i.OriginalDefinition.GetFullName(isGlobal) == interfaceFullName
         );
