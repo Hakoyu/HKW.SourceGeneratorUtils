@@ -35,10 +35,7 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
     /// <param name="attributeData">特性数据</param>
     public AttributeParamDictionary(AttributeData attributeData)
     {
-        if (
-            attributeData?.AttributeConstructor?.Parameters
-            is ImmutableArray<IParameterSymbol> constructorParams
-        )
+        if (attributeData?.AttributeConstructor?.Parameters is { } constructorParams)
         {
             for (var i = 0; i < constructorParams.Length; i++)
             {
@@ -51,15 +48,15 @@ public class AttributeParamDictionary : IDictionary<string, AttributeParam>
                     _dictionary.TryAdd(param.Name, new(arg));
             }
         }
-        if (
-            attributeData?.NamedArguments
-            is ImmutableArray<KeyValuePair<string, TypedConstant>> namedArguments
-        )
+        if (attributeData?.NamedArguments is { } namedArguments)
         {
             for (var i = 0; i < namedArguments.Length; i++)
             {
                 var param = namedArguments[i];
-                _dictionary.TryAdd(param.Key, new(param.Value));
+                if (param.Value.Kind is TypedConstantKind.Array)
+                    _dictionary.TryAdd(param.Key, new(param.Value.Values));
+                else
+                    _dictionary.TryAdd(param.Key, new(param.Value));
             }
         }
     }

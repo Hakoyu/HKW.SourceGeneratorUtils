@@ -12,7 +12,7 @@ internal class Program
     }
 }
 
-[SourceGeneratorTest]
+[SourceGeneratorTest(Ints = [1, 2, 3])]
 partial class PTest
 {
     Task Task1 { get; } = Task.FromResult(0);

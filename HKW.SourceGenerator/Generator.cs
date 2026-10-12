@@ -43,12 +43,17 @@ internal partial class Generator : IIncrementalGenerator
         {
             var classSymbol = (INamedTypeSymbol)
                 ModelExtensions.GetDeclaredSymbol(syntaxTreeInfo.SemanticModel, declaredClass);
-            foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
+            var att = classSymbol.GetFirstAttribute(typeof(SourceGeneratorTestAttribute).FullName);
+            if (att is not null)
             {
-                var result = property.Type.GetTaskResult();
-                //if (property.Type.InheritedFrom(GeneratorHelper.TaskResultFullName))
-                //    Debug.WriteLine(property.Type.GetFullName());
+                var info = att.GetInfo();
             }
+            //foreach (var property in classSymbol.GetMembers().OfType<IPropertySymbol>())
+            //{
+            //    var result = property.Type.GetTaskResult();
+            //    //if (property.Type.InheritedFrom(GeneratorHelper.TaskResultFullName))
+            //    //    Debug.WriteLine(property.Type.GetFullName());
+            //}
             //if (
             //    classSymbol
             //        .GetAttributes()
@@ -186,11 +191,6 @@ public class SourceGeneratorTestAttribute : Attribute
         S1 = s1;
         S2 = s2;
         S3 = s3;
-    }
-
-    public SourceGeneratorTestAttribute(params int[] ints)
-    {
-        Ints = ints;
     }
 
     public string S1 { get; set; } = string.Empty;
